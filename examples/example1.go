@@ -14,14 +14,14 @@ func main(){
 	})
 
 	extendedClient := rejonson.ExtendClient(client)
-	b, err := extendedClient.JSONGet("someKey").Bytes()
+	b, err := extendedClient.JsonGet("someKey").Bytes()
 	fmt.Println(string(b), err)
 
-	c, err := extendedClient.JSONSet("someKey", ".", "{\"key\":89, \"keyB\":70}").Result()
+	c, err := extendedClient.JsonSet("someKey", ".", "{\"key\":89, \"keyB\":70}").Result()
 
 	fmt.Println(c, err)
 
-	e, err := extendedClient.JSONDel("someKey", "").Result()
+	e, err := extendedClient.JsonDel("someKey", "").Result()
 	fmt.Println(e, err)
 }
 
