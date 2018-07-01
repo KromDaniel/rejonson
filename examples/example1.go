@@ -17,12 +17,12 @@ func main(){
 	b, err := extendedClient.JsonGet("someKey").Bytes()
 	fmt.Println(string(b), err)
 
-	c, err := extendedClient.JsonSet("someKey", ".", "{\"key\":89, \"keyB\":70}").Result()
+	extendedClient.JsonSet("someKey", ".", "{\"key\":89, \"keyB\":70}").Result()
 
-	fmt.Println(c, err)
+	v := extendedClient.JsonObjKeys("someKey", ".")
+	res := len(v.Val())
+	fmt.Println(res)
 
-	e, err := extendedClient.JsonDel("someKey", "").Result()
-	fmt.Println(e, err)
 }
 
 
