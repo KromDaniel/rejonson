@@ -68,8 +68,8 @@ func (cl *redisProcessor) JsonArrAppend(key, path string, jsons ...interface{}) 
 	return jsonArrAppendExecute(cl, append([]interface{}{key, path}, jsons...)...)
 }
 
-func (cl *redisProcessor) JsonArrIndex(key, path , json string, startAndStop ...interface{}) *redis.IntCmd {
-	return jsoArrIndexExecute(cl, append([]interface{}{key, path, json}, startAndStop...)...)
+func (cl *redisProcessor) JsonArrIndex(key, path string, jsonScalar interface{}, startAndStop ...interface{}) *redis.IntCmd {
+	return jsoArrIndexExecute(cl, append([]interface{}{key, path, jsonScalar}, startAndStop...)...)
 }
 
 func (cl *redisProcessor) JsonArrInsert(key, path string, index int, jsons ...interface{}) *redis.IntCmd {

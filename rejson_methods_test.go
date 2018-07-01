@@ -6,6 +6,9 @@ import (
 	"time"
 	"math/rand"
 	"github.com/stretchr/testify/assert"
+	"github.com/go-redis/redis"
+	"encoding/json"
+	"io/ioutil"
 )
 
 var (
@@ -29,8 +32,12 @@ var (
 }
 `
 	client *Client
+	redisTestsPrefix string
 )
 
+func concatKey(key string)string {
+	return redisTestsPrefix + key
+}
 func assertJonsonEqual(left *jonson.JSON, right *jonson.JSON, t *testing.T, shouldEqual bool) {
 	var errorMessage string
 	if shouldEqual {
@@ -75,7 +82,20 @@ func randStringRunes(n int) string {
 
 func TestMain(m *testing.M) {
 	rand.Seed(time.Now().UnixNano())
-	client = GetRedisConnection()
+	var redisOptions redis.Options
+	config, _ := ioutil.ReadFile("test_config.json")
+	allOptions, err := jonson.Parse(config)
+
+	if err != nil {
+		panic("error with reading config file " +  err.Error())
+	}
+
+	err = json.Unmarshal(allOptions.At("redisConnection").ToUnsafeJSON(), &redisOptions)
+	if err != nil {
+		panic("error with reading redis config " +  err.Error())
+	}
+	client = ExtendClient(redis.NewClient(&redisOptions))
+	redisTestsPrefix = allOptions.At("redisKeyPrefix").GetUnsafeString()
 	defer client.Close()
 	m.Run()
 
@@ -150,6 +170,107 @@ func TestRedisProcessor_JsonMGet(t *testing.T) {
 }
 
 func TestRedisProcessor_JsonType(t *testing.T) {
-	
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	typeRes, err := client.JsonType(key,"").Result()
+	assert.Nil(t, err)
+	assert.Equal(t, "object", typeRes)
+
+	typeRes, err = client.JsonType(key,"keyB").Result()
+	assert.Nil(t, err)
+	assert.Equal(t, "string", typeRes)
 }
 
+func TestRedisProcessor_JsonNumIncrBy(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	incRes, err := client.JsonNumIncrBy(key, "keyA", 4).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, "60", incRes)
+}
+
+func TestRedisProcessor_JsonNumMultBy(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	multRes, err := client.JsonNumMultBy(key, "numbersArray[1]", 4).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, "8", multRes)
+}
+
+func TestRedisProcessor_JsonStrAppend(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	strAppRes, err := client.JsonStrAppend(key, "keyB", " \"hello\"").Result()
+	assert.Nil(t, err)
+
+	assert.Equal(t,16, int(strAppRes))
+}
+
+func TestRedisProcessor_JsonStrLen(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	strLenRes, err := client.JsonStrLen(key, "keyB").Result()
+	assert.Nil(t, err)
+	assert.Equal(t, len("some string"), int(strLenRes))
+}
+
+func TestRedisProcessor_JsonArrAppend(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	arrAppendRes, err := client.JsonArrAppend(key, "numbersArray", 12).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, 6, int(arrAppendRes))
+}
+
+func TestRedisProcessor_JsonArrIndex(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	jsn := jonson.NewEmptyJSONArray()
+
+	for i:=0; i < 100; i++ {
+		jsn.SliceAppend(i)
+	}
+
+	setErr := client.JsonSet(key, ".", jsn.ToUnsafeJSONString()).Err()
+	assert.Nil(t, setErr)
+
+	arrIndexRes, err := client.JsonArrIndex(key, ".", 5).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, 5, int(arrIndexRes))
+
+
+	arrIndexRes, err = client.JsonArrIndex(key, ".", 5, 10, 90).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, -1, int(arrIndexRes))
+}
