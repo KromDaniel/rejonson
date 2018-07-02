@@ -274,3 +274,20 @@ func TestRedisProcessor_JsonArrIndex(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, -1, int(arrIndexRes))
 }
+
+func TestRedisProcessor_JsonArrInsert(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	//defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	arrInsertRes, err := client.JsonArrInsert(key, "numbersArray", 1, "2").Result()
+	assert.Nil(t, err)
+	assert.Equal(t, 6, int(arrInsertRes))
+}
+
+func TestRedisProcessor_JsonArrLen(t *testing.T) {
+
+}

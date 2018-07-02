@@ -73,7 +73,7 @@ func (cl *redisProcessor) JsonArrIndex(key, path string, jsonScalar interface{},
 }
 
 func (cl *redisProcessor) JsonArrInsert(key, path string, index int, jsons ...interface{}) *redis.IntCmd {
-	return jsoArrIndexExecute(cl, append([]interface{}{key, path, index}, jsons...)...)
+	return jsonArrInsertExecute(cl, append([]interface{}{key, path, index}, jsons...)...)
 }
 
 func (cl *redisProcessor) JsonArrLen(key, path string) *redis.IntCmd {
