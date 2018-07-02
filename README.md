@@ -94,8 +94,8 @@ It is recommended to run the unit tests when using rejonson.</br>The unit tests 
 
 The testing got few dependencies of its' own:
 
-* [jonson](https://github.com/KromDaniel/jonson)
-* [assert](https://github.com/stretchr/testify/assert)
+* jonson - https://github.com/KromDaniel/jonson
+* assert - https://github.com/stretchr/testify/assert
 
 ### Configuring Redis
 In order to guarantee the code is safe for use **The unit tests will have to use a real redis**.
