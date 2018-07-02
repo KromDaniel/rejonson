@@ -78,8 +78,8 @@ fmt.Println(json.At(7).GetUnsafeFloat64()) // 10
 
 ## API
 
-Rejonson supports all the methods as described at [ReJson Commands](https://oss.redislabs.com/rejson/commands/) except for `JSON.DEBUG` and `JSON.RESP`
-The arguments you are sending will be transferred to redis, so please make sure you are working by the rejson documentation.
+Rejonson supports all the methods as described at [ReJson Commands](https://oss.redislabs.com/rejson/commands/) except for `JSON.DEBUG` and `JSON.RESP`.
+The arguments will be transferred to redis so please make sure you conform the rejson documentation.
 
 Due to some rejson behavior [#issue-76](https://github.com/RedisLabsModules/rejson/issues/76), empty strings will be ignored
 
@@ -87,21 +87,21 @@ All the rejson methods starts with the prefix of `Json` e.g `JsonDel`, `JsonArrI
 
 
 ## Dependencies
-Rejonson got only single dependency which is [go-redis]("https://github.com/go-redis/redis"). The [testing](#testing) got some other dependencies as well
+Rejonson got only single dependency which is [go-redis](https://github.com/go-redis/redis). The [testing](#testing) got some other dependencies as well
 
 ## Testing
 It is recommended to run the unit tests when using rejonson.</br>The unit tests will make sure your `go-redis` version is compatible and your `rejson` plugin supports all the methods and working as expected.
 
 The testing got few dependencies of its' own:
 
-* [jonson]("https://github.com/KromDaniel/jonson")
-* [assert]("https://github.com/stretchr/testify/assert")
+* [jonson](https://github.com/KromDaniel/jonson)
+* [assert](https://github.com/stretchr/testify/assert)
 
 ### Configuring Redis
 In order to guarantee the code is safe for use **The unit tests will have to use a real redis**.
 To configure the connection edit the file `test_config.json`
 
-`redisConnection` will just be passed to [go-redis.Options](https://godoc.org/github.com/go-redis/redis#Options), the keys should confirm with the `Options` keys.</br> 
+`redisConnection` will just be passed to [go-redis.Options](https://godoc.org/github.com/go-redis/redis#Options), the keys should conform with the `Options` keys.</br> 
 `redisKeyPrefix` is the prefix the unit tests will add to written test data at the redis (the data is deleted at the end of each test)
 
 ```json
@@ -120,4 +120,5 @@ Apache 2.0
 
 ## Contact
 For any question or contribution, feel free to contact me at
-kromdan@gmail.com
+kromdan@gmail.com or open an issue.
+
