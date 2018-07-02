@@ -10,7 +10,6 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"sort"
-	"fmt"
 )
 
 var (
@@ -351,5 +350,38 @@ func TestRedisProcessor_JsonObjKeys(t *testing.T) {
 }
 
 func TestRedisProcessor_JsonObjLen(t *testing.T) {
-	
+	originalJS := jonson.ParseUnsafe([]byte(baseJsonTestObject))
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	objLenRes, err := client.JsonObjLen(key, ".").Result()
+	assert.Nil(t, err)
+	assert.Equal(t, len(originalJS.GetObjectKeys()), int(objLenRes))
+}
+
+func TestClient_Pipeline(t *testing.T) {
+	allKeys := make([]string, 0)
+	pipeline := client.Pipeline()
+
+	for i:=0; i < 10; i++ {
+		key := concatKey(randStringRunes(32))
+		pipeline.JsonSet(key, ".", baseJsonTestObject)
+		allKeys = append(allKeys, key)
+	}
+
+	// here we expected that delete counter will be 0
+	delRes, err := client.Del(allKeys...).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, 0, int(delRes))
+
+	_, err = pipeline.Exec()
+	assert.Nil(t, err)
+	// now we expect deleted count to be same as allKeysLength
+	delRes, err = client.Del(allKeys...).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, len(allKeys), int(delRes))
 }
