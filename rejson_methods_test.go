@@ -9,6 +9,8 @@ import (
 	"github.com/go-redis/redis"
 	"encoding/json"
 	"io/ioutil"
+	"sort"
+	"fmt"
 )
 
 var (
@@ -277,7 +279,7 @@ func TestRedisProcessor_JsonArrIndex(t *testing.T) {
 
 func TestRedisProcessor_JsonArrInsert(t *testing.T) {
 	key := concatKey(randStringRunes(32))
-	//defer client.Del(key)
+	defer client.Del(key)
 
 	if !insertBaseJsonToRedis(key, t) {
 		t.FailNow()
@@ -289,5 +291,65 @@ func TestRedisProcessor_JsonArrInsert(t *testing.T) {
 }
 
 func TestRedisProcessor_JsonArrLen(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
 
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	arrLenRes, err := client.JsonArrLen(key, "numbersArray").Result()
+	assert.Nil(t, err)
+	assert.Equal(t, 5, int(arrLenRes))
+}
+
+func TestRedisProcessor_JsonArrPop(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	arrPopRes, err := client.JsonArrPop(key, "numbersArray", 1).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, "2", arrPopRes)
+}
+
+func TestRedisProcessor_JsonArrTrim(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	arrTrimRes, err := client.JsonArrTrim(key, "numbersArray", 1,3).Result()
+	assert.Nil(t, err)
+	assert.Equal(t, 3, int(arrTrimRes))
+
+	trimArr, err := client.JsonGet(key, "numbersArray").Result()
+	assert.Nil(t, err)
+	assertJonsonEqual(jonson.New([]float64{2,3,4}), jonson.ParseUnsafe([]byte(trimArr)) ,t, true)
+}
+
+func TestRedisProcessor_JsonObjKeys(t *testing.T) {
+	originalJS := jonson.ParseUnsafe([]byte(baseJsonTestObject))
+	originalKeys := originalJS.GetObjectKeys()
+	key := concatKey(randStringRunes(32))
+	defer client.Del(key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	objKeysRes, err := client.JsonObjKeys(key, ".").Result()
+	assert.Nil(t, err)
+	sort.Strings(originalKeys)
+	sort.Strings(objKeysRes)
+	assert.Equal(t, originalKeys, objKeysRes)
+}
+
+func TestRedisProcessor_JsonObjLen(t *testing.T) {
+	
 }
