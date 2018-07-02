@@ -1,6 +1,6 @@
 # Rejonson
 
-Redis rejson extension built uppon [go-redis](https://github.com/go-redis/redis)
+Redis rejson extension built upon [go-redis](https://github.com/go-redis/redis)
 
 
 ## Table of Contents
