@@ -6,11 +6,17 @@ type redisProcessor struct {
 	Process func(cmd redis.Cmder) error
 }
 
+/*
+Client is an extended redis.Client, stores a pointer to the original redis.Client
+*/
 type Client struct {
 	*redis.Client
- 	*redisProcessor
+	*redisProcessor
 }
 
+/*
+Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner
+*/
 type Pipeline struct {
 	redis.Pipeliner
 	*redisProcessor
@@ -29,14 +35,41 @@ func (pl *Pipeline) Pipeline() *Pipeline {
 	pip := pl.Pipeliner.Pipeline()
 	return ExtendPipeline(pip)
 }
+
+/*
+JsonDel
+
+returns intCmd -> deleted 1 or 0
+read more: https://oss.redislabs.com/rejson/commands/#jsondel
+*/
 func (cl *redisProcessor) JsonDel(key, path string) *redis.IntCmd {
 	return jsonDelExecute(cl, key, path)
 }
 
+/*
+JsonGet
+
+Possible args:
+
+(Optional) INDENT + indent-string
+(Optional) NEWLINE + line-break-string
+(Optional) SPACE + space-string
+(Optional) NOESCAPE
+(Optional) path ...string
+
+returns stringCmd -> the JSON string
+read more: https://oss.redislabs.com/rejson/commands/#jsonget
+*/
 func (cl *redisProcessor) JsonGet(key string, args ...interface{}) *redis.StringCmd {
 	return jsonGetExecute(cl, append([]interface{}{key}, args...)...)
 }
 
+/*
+jsonSet
+
+Possible args:
+(Optional)
+*/
 func (cl *redisProcessor) JsonSet(key, path, json string, args ...interface{}) *redis.StatusCmd {
 	return jsonSetExecute(cl, append([]interface{}{key, path, json}, args...)...)
 }

@@ -21,4 +21,3 @@ func ExtendPipeline(pipeline redis.Pipeliner)*Pipeline {
 }
 
 
-
