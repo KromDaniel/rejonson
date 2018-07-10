@@ -14,9 +14,15 @@ before_script:
   - docker pull redislabs/rejson
   - docker run -d -p 6379:6379 --name redis-rejson redislabs/rejson:latest
   - docker ps -a|grep redis-rejson
+  - go get golang.org/x/tools/cmd/cover
+  - go get github.com/mattn/goveralls
 
 install:
   - go get -t github.com/KromDaniel/rejonson
 
 script:
   - go test -v .
+  - go test -covermode=count -coverprofile=profile.cov .
+
+after_script:
+  - $HOME/gopath/bin/goveralls -coverprofile=profile.cov -service=travis-ci
