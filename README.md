@@ -2,6 +2,8 @@
 
 Redis rejson extension built upon [go-redis](https://github.com/go-redis/redis)
 
+[![Build Status](https://travis-ci.org/KromDaniel/rejonson.svg?branch=master)](https://travis-ci.org/KromDaniel/rejonson)
+[![Coverage Status](https://coveralls.io/repos/github/KromDaniel/rejonson/badge.svg?branch=master)](https://coveralls.io/github/KromDaniel/rejonson?branch=master)
 
 ## Table of Contents
 
