@@ -10,3 +10,17 @@ go:
   - "1.9"
   - "1.10"
   - master
+
+services:
+  - docker
+
+before_script:
+  - docker pull redislabs/rejson
+  - docker run -d -p 6379:6379 --name redis-rejson redislabs/rejson:latest
+  - docker ps -a|grep redis-rejson
+
+install:
+  - go get -t github.com/KromDaniel/rejonson
+
+script:
+  - go test -v .
