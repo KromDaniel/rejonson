@@ -61,7 +61,7 @@ Client will also return extended `Pipeline` and `TXPipeline`
 
 ```go
 pipeline := client.Pipeline()
-pipeline.JsonNumMultBy("rejonson-json-command", "[7]", 10)
+pipeline.JsonNumMultBy("rejonson-json-command", "[7]", 10) // same array from the first example
 pipeline.Set("go-redis-pipeline-command", "hello from go-redis", time.Second)
 
 _, err = pipeline.Exec()
