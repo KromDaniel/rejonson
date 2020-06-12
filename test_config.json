@@ -1,8 +1,0 @@
-{
-  "redisConnection": {
-    "Addr":  "localhost:6379",
-    "Password": "",
-    "DB": 0
-  },
-  "redisKeyPrefix": "rejonson::tests::"
-}
