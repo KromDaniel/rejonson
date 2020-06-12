@@ -1,7 +1,7 @@
 package rejonson
 
 import (
-	"github.com/go-redis/redis"
+	"github.com/go-redis/redis/v7"
 )
 
 func concatWithCmd(cmdName string, args []interface{}) []interface{} {

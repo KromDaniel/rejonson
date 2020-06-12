@@ -1,6 +1,8 @@
 package rejonson
 
-import "github.com/go-redis/redis"
+import (
+	"github.com/go-redis/redis/v7"
+)
 
 func ExtendClient(client *redis.Client) *Client {
 	return &Client{
