@@ -15,9 +15,6 @@ before_script:
   - go get golang.org/x/tools/cmd/cover
   - go get github.com/mattn/goveralls
 
-install:
-  - go get "github.com/KromDaniel/rejonson@$TRAVIS_BRANCH"
-
 script:
   - go test -v .
   - go test -covermode=count -coverprofile=profile.cov .
