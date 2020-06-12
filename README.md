@@ -113,8 +113,6 @@ It is recommended to run the unit tests when using rejonson.</br>The unit tests 
 
 The testing library depends on [assert](https://github.com/stretchr/testify/assert) library
 
-```
-
 ## License
 Apache 2.0
 
