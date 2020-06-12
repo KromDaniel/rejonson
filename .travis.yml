@@ -16,7 +16,7 @@ before_script:
   - go get github.com/mattn/goveralls
 
 install:
-  - go get github.com/KromDaniel/rejonson@$TRAVIS_BRANCH
+  - go get "github.com/KromDaniel/rejonson@$TRAVIS_BRANCH"
 
 script:
   - go test -v .
