@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/go-redis/redis"
-	"github.com/KromDaniel/rejonson"
-	"github.com/KromDaniel/jonson"
-	"time"
 	"fmt"
+	"github.com/KromDaniel/jonson"
+	"github.com/KromDaniel/rejonson"
+	"github.com/go-redis/redis"
+	"time"
 )
 
 func main() {

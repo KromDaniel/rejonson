@@ -1,10 +1,8 @@
 language: go
 
 go:
-  - "1.7"
-  - "1.8"
-  - "1.9"
-  - "1.10"
+  - "1.13"
+  - "1.14"
   - master
 
 services:
@@ -18,7 +16,7 @@ before_script:
   - go get github.com/mattn/goveralls
 
 install:
-  - go get -t github.com/KromDaniel/rejonson
+  - go get github.com/KromDaniel/rejonson@$TRAVIS_BRANCH
 
 script:
   - go test -v .
