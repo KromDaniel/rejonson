@@ -1,4 +1,4 @@
-module github.com/KromDaniel/rejonson
+module github.com/KromDaniel/rejonson/v7
 
 go 1.14
 
