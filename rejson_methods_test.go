@@ -206,7 +206,7 @@ func TestRedisProcessor_JsonType(t *testing.T) {
 		return
 	}
 
-	typeRes, err := client.JsonType(key, "").Result()
+	typeRes, err := client.JsonType(key, ".").Result()
 	if assert.NoError(t, err) {
 		assert.Equal(t, "object", typeRes)
 	}
