@@ -4,7 +4,6 @@ package rejonson
 
 import (
 	"context"
-	"github.com/KromDaniel/rejonson"
 	"github.com/go-redis/redis/v9"
 )
 
