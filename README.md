@@ -7,7 +7,7 @@ Redis rejson extension built upon [go-redis](https://github.com/go-redis/redis)
 
 ## Table of Contents
 
-1. [Quick start](#install)
+1. [Quick start](#Quick%20Start)
 2. [API](#api)
 3. [Dependencies](#dependencies)
 4. [Testing](#testing)
@@ -39,7 +39,7 @@ go get github.com/KromDaniel/rejonson/v8
 go get github.com/KromDaniel/rejonson/v9
 ```
 
-## Quick Starrt
+## Quick Start
 
 
 ```go
