@@ -1,0 +1,44 @@
+// RedisProcessor is redis client or pipeline instance that will process a command
+type RedisProcessor interface {
+	Process({{if .HasContext}}context.Context,{{end}}redis.Cmder) error
+}
+
+/*
+Client is an extended redis.Client, stores a pointer to the original redis.Client
+*/
+type Client struct {
+	*redis.Client
+}
+
+/*
+Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner
+*/
+type Pipeline struct {
+	redis.Pipeliner
+}
+
+func (cl *Client) Pipeline() *Pipeline {
+	pip := cl.Client.Pipeline()
+	return ExtendPipeline(pip)
+}
+
+func (cl *Client) TXPipeline() *Pipeline {
+	pip := cl.Client.TxPipeline()
+	return ExtendPipeline(pip)
+}
+func (pl *Pipeline) Pipeline() *Pipeline {
+	pip := pl.Pipeliner.Pipeline()
+	return ExtendPipeline(pip)
+}
+
+func ExtendClient(client *redis.Client) *Client {
+	return &Client{
+		client,
+	}
+}
+
+func ExtendPipeline(pipeline redis.Pipeliner) *Pipeline {
+	return &Pipeline{
+		pipeline,
+	}
+}

@@ -1,8 +1,11 @@
 language: go
 
 go:
-  - "1.13"
   - "1.14"
+  - "1.15"
+  - "1.16"
+  - "1.17"
+  - "1.18"
   - master
 
 services:
@@ -12,12 +15,6 @@ before_script:
   - docker pull redislabs/rejson
   - docker run -d -p 6379:6379 --name redis-rejson redislabs/rejson:latest
   - docker ps -a|grep redis-rejson
-  - go get golang.org/x/tools/cmd/cover
-  - go get github.com/mattn/goveralls
 
 script:
-  - go test -v .
-  - go test -covermode=count -coverprofile=profile.cov .
-
-after_script:
-  - $HOME/gopath/bin/goveralls -coverprofile=profile.cov -service=travis-ci
+  - test.sh
