@@ -104,6 +104,11 @@ func TestMain(m *testing.M) {
 		Password: redisPassword,
 	}))
 
+	// Force RESP2 for compatibility with go-redis v9 string parsing under RedisJSON
+	if err := client.Do(ctx, "HELLO", "2").Err(); err != nil {
+		fmt.Printf("warning: unable to downgrade protocol to RESP2: %v\n", err)
+	}
+
 	if err := client.Ping(ctx).Err(); err != nil {
 		panic(fmt.Errorf("unable to ping redis %w", err))
 	}
@@ -516,7 +521,7 @@ func TestRedisProcessor_JsonSetMode(t *testing.T) {
 	}
 
 	// Try to set again with NX mode (should fail or return nil)
-	setRes2, _ := client.JsonSetMode(ctx, key, ".", `{"test":2}`, "NX").Result()
+	_ = client.JsonSetMode(ctx, key, ".", `{"test":2}`, "NX")
 	// NX mode should not overwrite, so value should still be 1
 	getRes, _ := client.JsonGet(ctx, key, ".test").Result()
 	assert.Contains(t, getRes, "1")
@@ -538,7 +543,7 @@ func TestRedisProcessor_JsonToggle(t *testing.T) {
 	// Toggle the boolean
 	toggleRes, err := client.JsonToggle(ctx, key, ".flag").Result()
 	if assert.NoError(t, err) {
-		assert.Equal(t, int64(0), toggleRes)
+		assert.Contains(t, toggleRes, "false")
 	}
 
 	// Verify it was toggled to false

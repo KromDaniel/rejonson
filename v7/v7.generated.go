@@ -416,20 +416,20 @@ func (processor *Pipeline) JsonSetMode(key string, path string, value string, mo
 }
 
 // ---- JsonToggle ----
-func JsonToggle(processor RedisProcessor, key string, path string) *redis.IntCmd {
+func JsonToggle(processor RedisProcessor, key string, path string) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.TOGGLE")
 	paramsToItf = append(paramsToItf, key)
 	paramsToItf = append(paramsToItf, path)
-	cmd := redis.NewIntCmd(paramsToItf...)
+	cmd := redis.NewStringCmd(paramsToItf...)
 	// ignore returned error, it is part of the cmd
 	_ = processor.Process(cmd)
 	return cmd
 }
-func (processor *Client) JsonToggle(key string, path string) *redis.IntCmd {
+func (processor *Client) JsonToggle(key string, path string) *redis.StringCmd {
 	return JsonToggle(processor, key, path)
 }
-func (processor *Pipeline) JsonToggle(key string, path string) *redis.IntCmd {
+func (processor *Pipeline) JsonToggle(key string, path string) *redis.StringCmd {
 	return JsonToggle(processor, key, path)
 }
 

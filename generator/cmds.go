@@ -339,6 +339,6 @@ var cmds = []RejsonCommand{
 				Type: reflect.String,
 			},
 		},
-		CommandCtr: redis.NewIntCmd,
+		CommandCtr: redis.NewStringCmd,
 	},
 }
