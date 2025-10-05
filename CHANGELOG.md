@@ -7,3 +7,4 @@ All notable changes to this project will be documented in this file. The format 
 - Modernized build tooling and CI
 - Added community health files (Code of Conduct, Contributing, Security policy)
 - Added GitHub Actions workflow covering Go 1.20.x – 1.23.x
+- Enhanced Dependabot auto-merge workflow with auto-approval for patch and minor version updates
