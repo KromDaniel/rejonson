@@ -430,6 +430,129 @@ func TestRedisProcessor_JsonObjLen(t *testing.T) {
 	}
 }
 
+func TestRedisProcessor_JsonClear(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del({{template "withCtxComma"}}key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	// Clear the array
+	clearRes, err := client.JsonClear({{template "withCtxComma"}}key, "numbersArray").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, int64(1), clearRes)
+	}
+
+	// Verify array is now empty
+	typeRes, err := client.JsonType({{template "withCtxComma"}}key, "numbersArray").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "array", typeRes)
+	}
+}
+
+func TestRedisProcessor_JsonForget(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del({{template "withCtxComma"}}key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	// Delete a path using forget (alias for del)
+	forgetRes, err := client.JsonForget({{template "withCtxComma"}}key, "keyA").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, int64(1), forgetRes)
+	}
+}
+
+func TestRedisProcessor_JsonMerge(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del({{template "withCtxComma"}}key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	// Merge a new field
+	mergeRes, err := client.JsonMerge({{template "withCtxComma"}}key, ".", `{"newKey": "newValue"}`).Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "OK", mergeRes)
+	}
+
+	// Verify the merge worked
+	getRes, err := client.JsonGet({{template "withCtxComma"}}key, "newKey").Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, getRes, "newValue")
+	}
+}
+
+func TestRedisProcessor_JsonMSet(t *testing.T) {
+	key1 := concatKey(randStringRunes(32))
+	key2 := concatKey(randStringRunes(32))
+	defer client.Del({{template "withCtxComma"}}key1, key2)
+
+	// Set multiple keys at once
+	msetRes, err := client.JsonMSet({{template "withCtxComma"}}key1, ".", `{"a":1}`, key2, ".", `{"b":2}`).Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "OK", msetRes)
+	}
+
+	// Verify both keys were set
+	get1, err := client.JsonGet({{template "withCtxComma"}}key1).Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, get1, `"a"`)
+	}
+
+	get2, err := client.JsonGet({{template "withCtxComma"}}key2).Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, get2, `"b"`)
+	}
+}
+
+func TestRedisProcessor_JsonSetMode(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del({{template "withCtxComma"}}key)
+
+	// Set with NX mode (only if doesn't exist)
+	setRes, err := client.JsonSetMode({{template "withCtxComma"}}key, ".", `{"test":1}`, "NX").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "OK", setRes)
+	}
+
+	// Try to set again with NX mode (should fail or return nil)
+	setRes2, _ := client.JsonSetMode({{template "withCtxComma"}}key, ".", `{"test":2}`, "NX").Result()
+	// NX mode should not overwrite, so value should still be 1
+	getRes, _ := client.JsonGet({{template "withCtxComma"}}key, ".test").Result()
+	assert.Contains(t, getRes, "1")
+
+	// Set with XX mode (only if exists)
+	setRes3, err := client.JsonSetMode({{template "withCtxComma"}}key, ".test", "99", "XX").Result()
+	if err == nil {
+		assert.Equal(t, "OK", setRes3)
+	}
+}
+
+func TestRedisProcessor_JsonToggle(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del({{template "withCtxComma"}}key)
+
+	// Set a boolean value
+	client.JsonSet({{template "withCtxComma"}}key, ".", `{"flag":true}`)
+
+	// Toggle the boolean
+	toggleRes, err := client.JsonToggle({{template "withCtxComma"}}key, ".flag").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, int64(0), toggleRes)
+	}
+
+	// Verify it was toggled to false
+	getRes, err := client.JsonGet({{template "withCtxComma"}}key, ".flag").Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, getRes, "false")
+	}
+}
+
 func TestClient_Pipeline(t *testing.T) {
 	allKeys := make([]string, 0)
 	pipeline := client.Pipeline()
