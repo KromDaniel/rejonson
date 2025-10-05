@@ -3,14 +3,13 @@ package rejonson
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-redis/redis/v8"
+	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"os"
 	"sort"
 	"testing"
 	"time"
-
-	"github.com/go-redis/redis/v8"
-	"github.com/stretchr/testify/assert"
 
 	"context"
 )
@@ -104,10 +103,6 @@ func TestMain(m *testing.M) {
 		Addr:     redisHost,
 		Password: redisPassword,
 	}))
-
-	if err := client.Do(ctx, "HELLO", "2").Err(); err != nil {
-		fmt.Printf("warning: unable to downgrade protocol to RESP2: %v\n", err)
-	}
 
 	if err := client.Ping(ctx).Err(); err != nil {
 		panic(fmt.Errorf("unable to ping redis %w", err))

@@ -261,4 +261,84 @@ var cmds = []RejsonCommand{
 		},
 		CommandCtr: redis.NewIntCmd,
 	},
+	{
+		Name: "JsonClear",
+		Cmd:  "JSON.CLEAR",
+		Args: []RejsonArg{
+			keyArg,
+			{
+				Name: "path",
+				Type: reflect.String,
+			},
+		},
+		CommandCtr: redis.NewIntCmd,
+	},
+	{
+		Name: "JsonForget",
+		Cmd:  "JSON.FORGET",
+		Args: []RejsonArg{
+			keyArg,
+			{
+				Name: "path",
+				Type: reflect.String,
+			},
+		},
+		CommandCtr: redis.NewIntCmd,
+	},
+	{
+		Name: "JsonMerge",
+		Cmd:  "JSON.MERGE",
+		Args: []RejsonArg{
+			keyArg,
+			{
+				Name: "path",
+				Type: reflect.String,
+			},
+			{
+				Name: "value",
+				Type: reflect.String,
+			},
+		},
+		CommandCtr: redis.NewStatusCmd,
+	},
+	{
+		Name: "JsonMSet",
+		Cmd:  "JSON.MSET",
+		Args: []RejsonArg{
+			defaultVariadic,
+		},
+		CommandCtr: redis.NewStatusCmd,
+	},
+	{
+		Name: "JsonSetMode",
+		Cmd:  "JSON.SET",
+		Args: []RejsonArg{
+			keyArg,
+			{
+				Name: "path",
+				Type: reflect.String,
+			},
+			{
+				Name: "value",
+				Type: reflect.String,
+			},
+			{
+				Name: "mode",
+				Type: reflect.String,
+			},
+		},
+		CommandCtr: redis.NewStatusCmd,
+	},
+	{
+		Name: "JsonToggle",
+		Cmd:  "JSON.TOGGLE",
+		Args: []RejsonArg{
+			keyArg,
+			{
+				Name: "path",
+				Type: reflect.String,
+			},
+		},
+		CommandCtr: redis.NewIntCmd,
+	},
 }

@@ -4,7 +4,6 @@ package rejonson
 
 import (
 	"context"
-
 	"github.com/redis/go-redis/v9"
 )
 
@@ -325,6 +324,116 @@ func (processor *Client) JsonObjLen(ctx context.Context, key string, path string
 }
 func (processor *Pipeline) JsonObjLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonObjLen(processor, ctx, key, path)
+}
+
+// ---- JsonClear ----
+func JsonClear(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
+	paramsToItf := make([]interface{}, 0, 3)
+	paramsToItf = append(paramsToItf, "JSON.CLEAR")
+	paramsToItf = append(paramsToItf, key)
+	paramsToItf = append(paramsToItf, path)
+	cmd := redis.NewIntCmd(ctx, paramsToItf...)
+	// ignore returned error, it is part of the cmd
+	_ = processor.Process(ctx, cmd)
+	return cmd
+}
+func (processor *Client) JsonClear(ctx context.Context, key string, path string) *redis.IntCmd {
+	return JsonClear(processor, ctx, key, path)
+}
+func (processor *Pipeline) JsonClear(ctx context.Context, key string, path string) *redis.IntCmd {
+	return JsonClear(processor, ctx, key, path)
+}
+
+// ---- JsonForget ----
+func JsonForget(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
+	paramsToItf := make([]interface{}, 0, 3)
+	paramsToItf = append(paramsToItf, "JSON.FORGET")
+	paramsToItf = append(paramsToItf, key)
+	paramsToItf = append(paramsToItf, path)
+	cmd := redis.NewIntCmd(ctx, paramsToItf...)
+	// ignore returned error, it is part of the cmd
+	_ = processor.Process(ctx, cmd)
+	return cmd
+}
+func (processor *Client) JsonForget(ctx context.Context, key string, path string) *redis.IntCmd {
+	return JsonForget(processor, ctx, key, path)
+}
+func (processor *Pipeline) JsonForget(ctx context.Context, key string, path string) *redis.IntCmd {
+	return JsonForget(processor, ctx, key, path)
+}
+
+// ---- JsonMerge ----
+func JsonMerge(processor RedisProcessor, ctx context.Context, key string, path string, value string) *redis.StatusCmd {
+	paramsToItf := make([]interface{}, 0, 4)
+	paramsToItf = append(paramsToItf, "JSON.MERGE")
+	paramsToItf = append(paramsToItf, key)
+	paramsToItf = append(paramsToItf, path)
+	paramsToItf = append(paramsToItf, value)
+	cmd := redis.NewStatusCmd(ctx, paramsToItf...)
+	// ignore returned error, it is part of the cmd
+	_ = processor.Process(ctx, cmd)
+	return cmd
+}
+func (processor *Client) JsonMerge(ctx context.Context, key string, path string, value string) *redis.StatusCmd {
+	return JsonMerge(processor, ctx, key, path, value)
+}
+func (processor *Pipeline) JsonMerge(ctx context.Context, key string, path string, value string) *redis.StatusCmd {
+	return JsonMerge(processor, ctx, key, path, value)
+}
+
+// ---- JsonMSet ----
+func JsonMSet(processor RedisProcessor, ctx context.Context, args ...interface{}) *redis.StatusCmd {
+	paramsToItf := make([]interface{}, 0, 2-1+len(args))
+	paramsToItf = append(paramsToItf, "JSON.MSET")
+	paramsToItf = append(paramsToItf, args...)
+	cmd := redis.NewStatusCmd(ctx, paramsToItf...)
+	// ignore returned error, it is part of the cmd
+	_ = processor.Process(ctx, cmd)
+	return cmd
+}
+func (processor *Client) JsonMSet(ctx context.Context, args ...interface{}) *redis.StatusCmd {
+	return JsonMSet(processor, ctx, args...)
+}
+func (processor *Pipeline) JsonMSet(ctx context.Context, args ...interface{}) *redis.StatusCmd {
+	return JsonMSet(processor, ctx, args...)
+}
+
+// ---- JsonSetMode ----
+func JsonSetMode(processor RedisProcessor, ctx context.Context, key string, path string, value string, mode string) *redis.StatusCmd {
+	paramsToItf := make([]interface{}, 0, 5)
+	paramsToItf = append(paramsToItf, "JSON.SET")
+	paramsToItf = append(paramsToItf, key)
+	paramsToItf = append(paramsToItf, path)
+	paramsToItf = append(paramsToItf, value)
+	paramsToItf = append(paramsToItf, mode)
+	cmd := redis.NewStatusCmd(ctx, paramsToItf...)
+	// ignore returned error, it is part of the cmd
+	_ = processor.Process(ctx, cmd)
+	return cmd
+}
+func (processor *Client) JsonSetMode(ctx context.Context, key string, path string, value string, mode string) *redis.StatusCmd {
+	return JsonSetMode(processor, ctx, key, path, value, mode)
+}
+func (processor *Pipeline) JsonSetMode(ctx context.Context, key string, path string, value string, mode string) *redis.StatusCmd {
+	return JsonSetMode(processor, ctx, key, path, value, mode)
+}
+
+// ---- JsonToggle ----
+func JsonToggle(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
+	paramsToItf := make([]interface{}, 0, 3)
+	paramsToItf = append(paramsToItf, "JSON.TOGGLE")
+	paramsToItf = append(paramsToItf, key)
+	paramsToItf = append(paramsToItf, path)
+	cmd := redis.NewIntCmd(ctx, paramsToItf...)
+	// ignore returned error, it is part of the cmd
+	_ = processor.Process(ctx, cmd)
+	return cmd
+}
+func (processor *Client) JsonToggle(ctx context.Context, key string, path string) *redis.IntCmd {
+	return JsonToggle(processor, ctx, key, path)
+}
+func (processor *Pipeline) JsonToggle(ctx context.Context, key string, path string) *redis.IntCmd {
+	return JsonToggle(processor, ctx, key, path)
 }
 
 // RedisProcessor is redis client or pipeline instance that will process a command
