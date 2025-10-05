@@ -1,0 +1,71 @@
+name: Bug report
+description: Report a problem to help us improve
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out a bug report!
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      description: Which module and version are you using? (e.g. `v9.1.0`)
+      placeholder: github.com/KromDaniel/rejonson/v9 v9.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: go-version
+    attributes:
+      label: Go version
+      description: Which Go toolchain are you using?
+      options:
+        - 1.25.x
+        - 1.24.x
+        - 1.23.x
+        - 1.22.x
+        - Other (specify below)
+    validations:
+      required: true
+  - type: input
+    id: go-version-other
+    attributes:
+      label: Other Go version
+      description: If you selected "Other", please specify the version.
+  - type: textarea
+    id: redis-version
+    attributes:
+      label: Redis/RedisJSON version
+      description: Include the Redis and RedisJSON versions in use.
+      placeholder: redis-stack-server 7.4.0
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the bug and what you expected to happen.
+      placeholder: Tell us what you see! Include any relevant stack traces or errors.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide a minimal code snippet or steps so we can reproduce the issue.
+      placeholder: |
+        1. Start RedisJSON
+        2. ...
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs/output
+      description: Paste any logs or `go test` output that might help us diagnose the issue.
+      render: shell
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched the existing issues.
+          required: true
+        - label: I have provided a reproduction or detailed description.
+          required: true

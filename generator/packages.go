@@ -15,7 +15,7 @@ var packages = []GoredisPackage{
 		HasContext:    true,
 	},
 	{
-		GoRedisImport: "github.com/go-redis/redis/v9",
+		GoRedisImport: "github.com/redis/go-redis/v9",
 		Output:        "v9/v9.generated.go",
 		HasContext:    true,
 	},

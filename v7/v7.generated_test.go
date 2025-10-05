@@ -3,13 +3,14 @@ package rejonson
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-redis/redis/v7"
-	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"os"
 	"sort"
 	"testing"
 	"time"
+
+	"github.com/go-redis/redis/v7"
+	"github.com/stretchr/testify/assert"
 )
 
 var (
