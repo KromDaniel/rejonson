@@ -3,7 +3,7 @@ package rejonson
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-redis/redis/v9"
+	"github.com/redis/go-redis/v9"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"os"
