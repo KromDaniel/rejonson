@@ -1,9 +1,3 @@
-goRedisClient := redis.NewClient(&redis.Options{
-goRedisClient := redis.NewClient(&redis.Options{
-pipeline.JsonSet("rejson-cmd-pipeline", ".", "[10]")
-pipeline.JsonNumMultBy("rejson-cmd-pipeline", "[0]", 10)
-pipeline.Set("go-redis-pipeline-command", "hello from go-redis", time.Second)
-
 # Rejonson
 
 > A friendly ReJSON client for Go, powered by the excellent [go-redis](https://github.com/go-redis/redis) ecosystem.
