@@ -1,0 +1,42 @@
+name: Refresh Go version matrix
+
+on:
+  schedule:
+    - cron: "0 5 1 * *"
+  workflow_dispatch:
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.21"
+          cache: true
+
+      - name: Update matrix
+        id: run
+        run: |
+          go run ./tools/update-go-matrix
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create Pull Request
+        if: steps.run.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: refresh Go version matrix"
+          title: "chore: refresh Go version matrix"
+          body: |
+            Automated update of the Go version test matrix to the latest stable Go minor releases.
+          branch: chore/refresh-go-matrix
+          delete-branch: true

@@ -2,7 +2,7 @@
 
 Redis rejson extension built upon [go-redis](https://github.com/go-redis/redis)
 
-[![Build Status](https://travis-ci.org/KromDaniel/rejonson.svg?branch=master)](https://travis-ci.org/KromDaniel/rejonson)
+[![CI](https://github.com/KromDaniel/rejonson/actions/workflows/ci.yml/badge.svg)](https://github.com/KromDaniel/rejonson/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/KromDaniel/rejonson/badge.svg?branch=master)](https://coveralls.io/github/KromDaniel/rejonson?branch=master)
 
 ## Table of Contents
@@ -10,37 +10,42 @@ Redis rejson extension built upon [go-redis](https://github.com/go-redis/redis)
 1. [Quick start](#Quick%20Start)
 2. [API](#api)
 3. [Dependencies](#dependencies)
-4. [Testing](#testing)
-5. [License](#license)
-6. [Contact](#contact)
- 
+4. [Supported Go Versions](#supported-go-versions)
+5. [Testing](#testing)
+6. [Contributing](#contributing)
+7. [Security](#security)
+8. [License](#license)
+9. [Contact](#contact)
 
 ## Quick start
 
 ### Install
 
-
 #### go-redis v6
+
 ```shell
 go get github.com/KromDaniel/rejonson
 ```
 
 #### go-redis v7
+
 ```shell
 go get github.com/KromDaniel/rejonson/v7
 ```
 
 #### go-redis v8
+
 ```shell
 go get github.com/KromDaniel/rejonson/v8
 ```
+
 #### go-redis v9
+
 ```shell
 go get github.com/KromDaniel/rejonson/v9
 ```
 
 ## Quick Start
-
 
 ```go
 import (
@@ -74,10 +79,11 @@ func ExtendClient(client *redis.Client) *rejonson.Client {
 ```
 
 ### Functional API
+
 Rejonson exports Json`X` functions, all of them accept `RedisProcessor` as first parameter and `context.Context` (for go-redis versions >= 8) as second parameter, the other parameters are command specific
 
-
 #### RedisProcessor
+
 RedisProcessor is `interface` with the following definition:
 
 ```go
@@ -85,7 +91,9 @@ type RedisProcessor interface {
 	Process(redis.Cmder) error
 }
 ```
+
 #### go-redis >= 8
+
 ```go
 type RedisProcessor interface {
 	Process(context.Context, redis.Cmder) error
@@ -95,6 +103,7 @@ type RedisProcessor interface {
 By default all `*redis.Client`, `redis.Pipeliner`, `*redis.ClusterClient`, `*redis.SentinelClient` implenets that interface, so you can pass any of them to the rejonson functional API
 
 #### example
+
 ```go
 client := redis.NewClient(&redis.Options{ /*...*/ })
 
@@ -108,7 +117,8 @@ for _, value := range res.Val() {
 }
 ```
 
-### Extend Client 
+### Extend Client
+
 Extends [go-redis](https://github.com/go-redis/redis) client with all ReJSON abilities, so you can use directly the rejson client for all redis usage and commands.
 
 ```go
@@ -141,6 +151,7 @@ fmt.Printf("Array length: %d", arrLen)
 ```
 
 ### Pipeline
+
 Client will also return extended `Pipeline` and `TXPipeline`
 
 ```go
@@ -175,14 +186,20 @@ Rejonson implements all the methods as described at [ReJson Commands](https://os
 
 The args will be serialized to redis directly so make sure to read [ReJSON command docs](https://oss.redislabs.com/redisjson/commands/)
 
-
 All the rejson methods starts with the prefix of `Json` e.g `JsonDel`, `JsonArrIndex`, `JsonMGet`.<br/>Each command returns specific `go-redis.Cmder` by the specific request.
 
----------
+---
+
 Due to some ReJSON bug - [#issue-76](https://github.com/RedisLabsModules/rejson/issues/76), some empty strings will be ignored.
 
 ## Dependencies
+
 Rejonson depends only on [go-redis](https://github.com/go-redis/redis). The [testing](#testing) also depends on assert library
+
+## Supported Go Versions
+
+The project is continuously tested against the latest four minor releases of Go (currently 1.22.x through 1.25.x). A scheduled workflow refreshes the matrix automatically each month so new Go releases are picked up without manual intervention. Older versions of Go may continue to work, but they are not part of the automated test matrix.
+
 ## Test
 
 <b>Rejonson tests must use real redis with ReJson module to run</b>
@@ -191,9 +208,18 @@ It is recommended to run the tests when using rejonson.</br>The unit tests will 
 
 The testing library depends on [assert](https://github.com/stretchr/testify/assert) library
 
+## Contributing
+
+We welcome contributions of all kinds! Please read the [contribution guidelines](./CONTRIBUTING.md) and the [code of conduct](./CODE_OF_CONDUCT.md) before opening an issue or pull request.
+
+## Security
+
+If you discover a security vulnerability, please follow the steps in our [security policy](./SECURITY.md).
+
 ## License
+
 Apache 2.0
 
 ## Contact
-For any question or contribution, feel free to open an issue.
 
+For any question or contribution, feel free to open an issue.

@@ -1,0 +1,68 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  test:
+    name: Go ${{ matrix.go-version }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: ["1.25.x", "1.24.x", "1.23.x", "1.22.x"]
+    services:
+      redis:
+        image: redis/redis-stack-server:latest
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli -h 127.0.0.1 -p 6379 ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
+          check-latest: true
+          cache: true
+
+      - name: Install redis-cli
+        run: sudo apt-get update && sudo apt-get install -y redis-tools
+
+      - name: Wait for RedisJSON
+        run: |
+          for i in {1..30}; do
+            if redis-cli -h 127.0.0.1 -p 6379 ping; then
+              redis-cli -h 127.0.0.1 -p 6379 JSON.SET ready . '"ok"' && exit 0
+            fi
+            sleep 2
+          done
+          echo "Redis service failed to start" >&2
+          exit 1
+
+      - name: Run tests across modules
+        run: bash ./test.sh
+
+      - name: Go vet (root module)
+        run: go vet ./...
+
+      - name: Go vet (v7)
+        run: go vet ./...
+        working-directory: v7
+
+      - name: Go vet (v8)
+        run: go vet ./...
+        working-directory: v8
+
+      - name: Go vet (v9)
+        run: go vet ./...
+        working-directory: v9
