@@ -3,14 +3,13 @@ package rejonson
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-redis/redis/v8"
+	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"os"
 	"sort"
 	"testing"
 	"time"
-
-	"github.com/go-redis/redis/v8"
-	"github.com/stretchr/testify/assert"
 
 	"context"
 )
@@ -105,6 +104,7 @@ func TestMain(m *testing.M) {
 		Password: redisPassword,
 	}))
 
+	// Force RESP2 for compatibility with go-redis v9 string parsing under RedisJSON
 	if err := client.Do(ctx, "HELLO", "2").Err(); err != nil {
 		fmt.Printf("warning: unable to downgrade protocol to RESP2: %v\n", err)
 	}
@@ -427,6 +427,129 @@ func TestRedisProcessor_JsonObjLen(t *testing.T) {
 	objLenRes, err := client.JsonObjLen(ctx, key, ".").Result()
 	if assert.NoError(t, err) {
 		assert.Equal(t, len(originalJS), int(objLenRes))
+	}
+}
+
+func TestRedisProcessor_JsonClear(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(ctx, key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	// Clear the array
+	clearRes, err := client.JsonClear(ctx, key, "numbersArray").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, int64(1), clearRes)
+	}
+
+	// Verify array is now empty
+	typeRes, err := client.JsonType(ctx, key, "numbersArray").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "array", typeRes)
+	}
+}
+
+func TestRedisProcessor_JsonForget(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(ctx, key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	// Delete a path using forget (alias for del)
+	forgetRes, err := client.JsonForget(ctx, key, "keyA").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, int64(1), forgetRes)
+	}
+}
+
+func TestRedisProcessor_JsonMerge(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(ctx, key)
+
+	if !insertBaseJsonToRedis(key, t) {
+		t.FailNow()
+	}
+
+	// Merge a new field
+	mergeRes, err := client.JsonMerge(ctx, key, ".", `{"newKey": "newValue"}`).Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "OK", mergeRes)
+	}
+
+	// Verify the merge worked
+	getRes, err := client.JsonGet(ctx, key, "newKey").Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, getRes, "newValue")
+	}
+}
+
+func TestRedisProcessor_JsonMSet(t *testing.T) {
+	key1 := concatKey(randStringRunes(32))
+	key2 := concatKey(randStringRunes(32))
+	defer client.Del(ctx, key1, key2)
+
+	// Set multiple keys at once
+	msetRes, err := client.JsonMSet(ctx, key1, ".", `{"a":1}`, key2, ".", `{"b":2}`).Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "OK", msetRes)
+	}
+
+	// Verify both keys were set
+	get1, err := client.JsonGet(ctx, key1).Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, get1, `"a"`)
+	}
+
+	get2, err := client.JsonGet(ctx, key2).Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, get2, `"b"`)
+	}
+}
+
+func TestRedisProcessor_JsonSetMode(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(ctx, key)
+
+	// Set with NX mode (only if doesn't exist)
+	setRes, err := client.JsonSetMode(ctx, key, ".", `{"test":1}`, "NX").Result()
+	if assert.NoError(t, err) {
+		assert.Equal(t, "OK", setRes)
+	}
+
+	// Try to set again with NX mode (should fail or return nil)
+	_ = client.JsonSetMode(ctx, key, ".", `{"test":2}`, "NX")
+	// NX mode should not overwrite, so value should still be 1
+	getRes, _ := client.JsonGet(ctx, key, ".test").Result()
+	assert.Contains(t, getRes, "1")
+
+	// Set with XX mode (only if exists)
+	setRes3, err := client.JsonSetMode(ctx, key, ".test", "99", "XX").Result()
+	if err == nil {
+		assert.Equal(t, "OK", setRes3)
+	}
+}
+
+func TestRedisProcessor_JsonToggle(t *testing.T) {
+	key := concatKey(randStringRunes(32))
+	defer client.Del(ctx, key)
+
+	// Set a boolean value
+	client.JsonSet(ctx, key, ".", `{"flag":true}`)
+
+	// Toggle the boolean
+	toggleRes, err := client.JsonToggle(ctx, key, ".flag").Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, toggleRes, "false")
+	}
+
+	// Verify it was toggled to false
+	getRes, err := client.JsonGet(ctx, key, ".flag").Result()
+	if assert.NoError(t, err) {
+		assert.Contains(t, getRes, "false")
 	}
 }
 
