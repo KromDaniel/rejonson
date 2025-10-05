@@ -1,225 +1,138 @@
-# Rejonson
-
-Redis rejson extension built upon [go-redis](https://github.com/go-redis/redis)
-
-[![CI](https://github.com/KromDaniel/rejonson/actions/workflows/ci.yml/badge.svg)](https://github.com/KromDaniel/rejonson/actions/workflows/ci.yml)
-[![Coverage Status](https://coveralls.io/repos/github/KromDaniel/rejonson/badge.svg?branch=master)](https://coveralls.io/github/KromDaniel/rejonson?branch=master)
-
-## Table of Contents
-
-1. [Quick start](#Quick%20Start)
-2. [API](#api)
-3. [Dependencies](#dependencies)
-4. [Supported Go Versions](#supported-go-versions)
-5. [Testing](#testing)
-6. [Contributing](#contributing)
-7. [Security](#security)
-8. [License](#license)
-9. [Contact](#contact)
-
-## Quick start
-
-### Install
-
-#### go-redis v6
-
-```shell
-go get github.com/KromDaniel/rejonson
-```
-
-#### go-redis v7
-
-```shell
-go get github.com/KromDaniel/rejonson/v7
-```
-
-#### go-redis v8
-
-```shell
-go get github.com/KromDaniel/rejonson/v8
-```
-
-#### go-redis v9
-
-```shell
-go get github.com/KromDaniel/rejonson/v9
-```
-
-## Quick Start
-
-```go
-import (
-	"github.com/KromDaniel/rejonson"
-	"github.com/go-redis/redis"
-)
-
-func FunctionalApi(client *redis.Client) {
-  // all rejonson.JsonX functions accepts redis.Client or redis.Pipeline
-	// notice that some versions of go-redis also require context.Context (which is supported by rejonson)
-	jsonStringCmd := rejonson.JsonGet(client, "key")
-	if err := jsonStringCmd.Err(); err != nil {
-		panic(err)
-	}
-
-	pipeline := client.Pipeline()
-	rejonson.JsonGet(pipeline, "key")
-	cmds, err := pipeline.Exec()
-	// do something with cmds, err
-}
-
-func ExtendClient(client *redis.Client) *rejonson.Client {
-  // You can extend go-redis client to rejonson.Client
-  // that will have all JSON API as methods
-	rejonsonClient := rejonson.ExtendClient(client)
-	pingCmd := rejonsonClient.Ping()
-	jsonCmd := rejonsonClient.JsonDel("key")
-
-	return rejonsonClient
-}
-```
-
-### Functional API
-
-Rejonson exports Json`X` functions, all of them accept `RedisProcessor` as first parameter and `context.Context` (for go-redis versions >= 8) as second parameter, the other parameters are command specific
-
-#### RedisProcessor
-
-RedisProcessor is `interface` with the following definition:
-
-```go
-type RedisProcessor interface {
-	Process(redis.Cmder) error
-}
-```
-
-#### go-redis >= 8
-
-```go
-type RedisProcessor interface {
-	Process(context.Context, redis.Cmder) error
-}
-```
-
-By default all `*redis.Client`, `redis.Pipeliner`, `*redis.ClusterClient`, `*redis.SentinelClient` implenets that interface, so you can pass any of them to the rejonson functional API
-
-#### example
-
-```go
-client := redis.NewClient(&redis.Options{ /*...*/ })
-
-res := rejonson.JsonMGet(client, "key1", "key2", "$..a")
-if res.Err() != nil {
-	// handle error
-}
-
-for _, value := range res.Val() {
-	// do something with value
-}
-```
-
-### Extend Client
-
-Extends [go-redis](https://github.com/go-redis/redis) client with all ReJSON abilities, so you can use directly the rejson client for all redis usage and commands.
-
-```go
-// go redis client
 goRedisClient := redis.NewClient(&redis.Options{
-  Addr: "localhost:6379",
-})
-
-client := rejonson.ExtendClient(goRedisClient)
-defer client.Close()
-
-arr := []interface{}{"hello", "world", 1, map[string]interface{}{"key": 12}}
-js, err := json.Marshal(arr)
-if err != nil {
-  // handle
-}
-// redis "native" command
-client.Set("go-redis-cmd", "hello", time.Second)
-// rejson command
-client.JsonSet("rejson-cmd", ".", string(js))
-
-// int command
-arrLen, err := client.JsonArrLen("rejson-cmd", ".").Result()
-if err != nil {
-  // handle
-}
-
-fmt.Printf("Array length: %d", arrLen)
-// Output: Array length: 4
-```
-
-### Pipeline
-
-Client will also return extended `Pipeline` and `TXPipeline`
-
-```go
 goRedisClient := redis.NewClient(&redis.Options{
-  Addr: "localhost:6379",
-})
-
-client := rejonson.ExtendClient(goRedisClient)
-
-pipeline := client.Pipeline()
 pipeline.JsonSet("rejson-cmd-pipeline", ".", "[10]")
 pipeline.JsonNumMultBy("rejson-cmd-pipeline", "[0]", 10)
 pipeline.Set("go-redis-pipeline-command", "hello from go-redis", time.Second)
 
-_, err := pipeline.Exec()
-if err != nil {
-  // handle error
-}
-jsonString, err := client.JsonGet("rejson-cmd-pipeline").Result()
-if err != nil {
-  // handle error
-}
+# Rejonson
 
-fmt.Printf("Array %s", jsonString)
+> A friendly ReJSON client for Go, powered by the excellent [go-redis](https://github.com/go-redis/redis) ecosystem.
 
-// Output: Array [100]
+[![CI](https://github.com/KromDaniel/rejonson/actions/workflows/ci.yml/badge.svg)](https://github.com/KromDaniel/rejonson/actions/workflows/ci.yml)
+[![Coverage Status](https://coveralls.io/repos/github/KromDaniel/rejonson/badge.svg?branch=master)](https://coveralls.io/github/KromDaniel/rejonson?branch=master)
+
+Rejonson wraps the entire RedisJSON command surface so you can keep using the `go-redis` APIs you already know—clients, pipelines, clusters, and all. Whether you prefer the functional helpers (e.g. `JsonGet`) or method-style access via an extended client, everything feels familiar.
+
+## Highlights
+
+- ✅ Supports go-redis v6, v7, v8, and v9 with generated, type-safe wrappers
+- 🧰 Works with clients, pipelines, clusters, and sentinels as drop-in processors
+- ⚙️ Keeps your project fresh: CI automatically tests the latest four Go releases and a scheduled job bumps the matrix for you
+- 🧪 Ships with integration tests that run against Redis Stack / RedisJSON out of the box
+- 📚 Built for open-source collaboration with contributor docs and issue templates in repo
+
+## Contents
+
+- [Compatibility & Install](#compatibility--install)
+- [Getting Started](#getting-started)
+  - [Functional helpers](#functional-helpers)
+  - [Extended client](#extended-client)
+- [Testing locally](#testing-locally)
+- [Release cadence](#release-cadence)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Compatibility & Install
+
+| go-redis version | Module path                         | Install command                            |
+| ---------------- | ----------------------------------- | ------------------------------------------ |
+| v6               | `github.com/KromDaniel/rejonson`    | `go get github.com/KromDaniel/rejonson`    |
+| v7               | `github.com/KromDaniel/rejonson/v7` | `go get github.com/KromDaniel/rejonson/v7` |
+| v8               | `github.com/KromDaniel/rejonson/v8` | `go get github.com/KromDaniel/rejonson/v8` |
+| v9               | `github.com/KromDaniel/rejonson/v9` | `go get github.com/KromDaniel/rejonson/v9` |
+
+Pick the module that matches the `go-redis` major version in your project and `go get` it like any other dependency. Each module is versioned independently so you can upgrade only what you need.
+
+## Getting Started
+
+### Functional helpers
+
+The functional API works with any `go-redis` processor—clients, pipelines, clusters, or sentinels. For go-redis v8 and newer, pass a `context.Context` as the second argument.
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	rejonson "github.com/KromDaniel/rejonson/v9"
+	"github.com/redis/go-redis/v9"
+)
+
+func main() {
+	ctx := context.Background()
+	client := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+
+	if err := rejonson.JsonSet(client, ctx, "example", ".", `{"a":1}`).Err(); err != nil {
+		panic(err)
+	}
+
+	val, err := rejonson.JsonGet(client, ctx, "example").Result()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(val)
+}
 ```
 
-## API
+All helpers follow the same naming convention as their RedisJSON counterparts (`JsonDel`, `JsonArrIndex`, `JsonMGet`, …) and return the corresponding `go-redis` command type (`*redis.StringCmd`, `*redis.IntCmd`, etc.).
 
-Rejonson implements all the methods as described at [ReJson Commands](https://oss.redislabs.com/rejson/commands/) except for `JSON.DEBUG` and `JSON.RESP`.
+### Extended client
 
-The args will be serialized to redis directly so make sure to read [ReJSON command docs](https://oss.redislabs.com/redisjson/commands/)
+Prefer method calls? Wrap an existing client with `ExtendClient` (or `ExtendClusterClient`, `ExtendSentinelClient`) and use the JSON API side-by-side with native Redis commands.
 
-All the rejson methods starts with the prefix of `Json` e.g `JsonDel`, `JsonArrIndex`, `JsonMGet`.<br/>Each command returns specific `go-redis.Cmder` by the specific request.
+```go
+package main
 
----
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"time"
 
-Due to some ReJSON bug - [#issue-76](https://github.com/RedisLabsModules/rejson/issues/76), some empty strings will be ignored.
+	rejonson "github.com/KromDaniel/rejonson/v8"
+	"github.com/go-redis/redis/v8"
+)
 
-## Dependencies
+func main() {
+	ctx := context.Background()
+	goRedis := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+	client := rejonson.ExtendClient(goRedis)
+	defer client.Close()
 
-Rejonson depends only on [go-redis](https://github.com/go-redis/redis). The [testing](#testing) also depends on assert library
+	payload, _ := json.Marshal([]interface{}{"hello", 42, map[string]string{"key": "value"}})
 
-## Supported Go Versions
+	client.Set(ctx, "native", "hello", time.Minute)
+	client.JsonSet(ctx, "json", ".", string(payload))
 
-The project is continuously tested against the latest four minor releases of Go (currently 1.22.x through 1.25.x). A scheduled workflow refreshes the matrix automatically each month so new Go releases are picked up without manual intervention. Older versions of Go may continue to work, but they are not part of the automated test matrix.
+	length, _ := client.JsonArrLen(ctx, "json", ".").Result()
+	fmt.Printf("Array length: %d\n", length)
+}
+```
 
-## Test
+Pipelines (`Pipeline`, `TxPipeline`) returned from an extended client also understand the JSON commands, so batching commands stays ergonomic.
 
-<b>Rejonson tests must use real redis with ReJson module to run</b>
+## Testing locally
 
-It is recommended to run the tests when using rejonson.</br>The unit tests will make sure your `go-redis` version is compatible and your `rejson` plugin supports all the methods and working as expected.
+RedisJSON is required to run the integration tests. The quickest setup is Redis Stack in Docker:
 
-The testing library depends on [assert](https://github.com/stretchr/testify/assert) library
+```bash
+docker run --rm -p 6379:6379 redis/redis-stack-server:latest
+./test.sh
+```
+
+> The test script walks through the root module and each submodule (`v7`, `v8`, `v9`) to guard against regressions across all supported go-redis versions.
+
+## Release cadence
+
+Continuous integration runs on every PR against the latest four Go toolchains (currently 1.22.x–1.25.x). A scheduled workflow re-generates the matrix once a month so new Go releases are picked up automatically—no manual edits required. We tag releases per module using semantic versioning so `go get` upgrades remain smooth.
 
 ## Contributing
 
-We welcome contributions of all kinds! Please read the [contribution guidelines](./CONTRIBUTING.md) and the [code of conduct](./CODE_OF_CONDUCT.md) before opening an issue or pull request.
-
-## Security
-
-If you discover a security vulnerability, please follow the steps in our [security policy](./SECURITY.md).
+We love community help! Check out the [CONTRIBUTING guide](./CONTRIBUTING.md) for workflow tips, coding standards, and release steps. Please also review the [Code of Conduct](./CODE_OF_CONDUCT.md) so everyone feels welcome.
 
 ## License
 
-Apache 2.0
-
-## Contact
-
-For any question or contribution, feel free to open an issue.
+Apache 2.0 — have fun building!

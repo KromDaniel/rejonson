@@ -6,7 +6,7 @@ Security updates are provided on a best-effort basis for the latest release of e
 
 ## Reporting a Vulnerability
 
-If you believe you have found a security vulnerability, please do **not** open a public issue. Instead, email [security@kromdaniel.com](mailto:security@kromdaniel.com) with the details. We aim to acknowledge new reports within 5 business days.
+If you believe you have found a security vulnerability, please open an issue at <https://github.com/KromDaniel/rejonson/issues> and include "[security]" in the title so we can triage it quickly. We aim to acknowledge new reports within 5 business days.
 
 Please include:
 
