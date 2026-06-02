@@ -3,7 +3,7 @@ module github.com/KromDaniel/rejonson/v9
 go 1.24
 
 require (
-	github.com/redis/go-redis/v9 v9.19.0
+	github.com/redis/go-redis/v9 v9.20.0
 	github.com/stretchr/testify v1.11.1
 )
 
