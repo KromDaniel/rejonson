@@ -18,5 +18,6 @@ var packages = []GoredisPackage{
 		GoRedisImport: "github.com/redis/go-redis/v9",
 		Output:        "v9/v9.generated.go",
 		HasContext:    true,
+		Deprecated:    true,
 	},
 }

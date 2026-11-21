@@ -55,6 +55,12 @@ func generateFunctional(cmd RejsonCommand, pkg GoredisPackage, root *jen.File) {
 
 	fnBody = append(fnBody, jen.Return(jen.Id(cmdId)))
 
+	if pkg.Deprecated {
+		root.Line()
+		root.Comment(fmt.Sprintf("%s runs %s.", cmd.Name, cmd.Cmd))
+		root.Comment("")
+		root.Comment(cmd.DeprecationComment())
+	}
 	root.Func().Id(cmd.Name).Params(createFunctionalParams(cmd, pkg.HasContext, true)...).
 		Id(v.Type().Out(0).String()).
 		Block(fnBody...)
@@ -69,6 +75,12 @@ func generateMethod(cmd RejsonCommand, pkg GoredisPackage, root *jen.File) {
 		}
 
 		ids, _ := getFunctionParamIds(cmd, pkg.HasContext, true, false)
+
+		if pkg.Deprecated {
+			root.Comment(fmt.Sprintf("%s runs %s.", cmd.Name, cmd.Cmd))
+			root.Comment("")
+			root.Comment(cmd.DeprecationComment())
+		}
 
 		root.Func().Params(jen.Id(processorId).Op("*").Id(caller)).Id(cmd.Name).Params(createFunctionalParams(cmd, pkg.HasContext, false)...).
 			Id(v.Type().Out(0).String()).

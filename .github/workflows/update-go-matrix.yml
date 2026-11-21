@@ -11,12 +11,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
-          go-version: "1.21"
+          go-version: stable
           cache: true
 
       - name: Update matrix
@@ -31,7 +31,7 @@ jobs:
 
       - name: Create Pull Request
         if: steps.run.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: "chore: refresh Go version matrix"

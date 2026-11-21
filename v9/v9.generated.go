@@ -8,6 +8,10 @@ import (
 )
 
 // ---- JsonGet ----
+
+// JsonGet runs JSON.GET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONGet (see redis.JSONCmdable).
 func JsonGet(processor RedisProcessor, ctx context.Context, key string, args ...interface{}) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 3-1+len(args))
 	paramsToItf = append(paramsToItf, "JSON.GET")
@@ -18,14 +22,26 @@ func JsonGet(processor RedisProcessor, ctx context.Context, key string, args ...
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonGet runs JSON.GET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONGet (see redis.JSONCmdable).
 func (processor *Client) JsonGet(ctx context.Context, key string, args ...interface{}) *redis.StringCmd {
 	return JsonGet(processor, ctx, key, args...)
 }
+
+// JsonGet runs JSON.GET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONGet (see redis.JSONCmdable).
 func (processor *Pipeline) JsonGet(ctx context.Context, key string, args ...interface{}) *redis.StringCmd {
 	return JsonGet(processor, ctx, key, args...)
 }
 
 // ---- JsonDel ----
+
+// JsonDel runs JSON.DEL.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONDel (see redis.JSONCmdable).
 func JsonDel(processor RedisProcessor, ctx context.Context, key string, args ...interface{}) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 3-1+len(args))
 	paramsToItf = append(paramsToItf, "JSON.DEL")
@@ -36,14 +52,26 @@ func JsonDel(processor RedisProcessor, ctx context.Context, key string, args ...
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonDel runs JSON.DEL.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONDel (see redis.JSONCmdable).
 func (processor *Client) JsonDel(ctx context.Context, key string, args ...interface{}) *redis.IntCmd {
 	return JsonDel(processor, ctx, key, args...)
 }
+
+// JsonDel runs JSON.DEL.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONDel (see redis.JSONCmdable).
 func (processor *Pipeline) JsonDel(ctx context.Context, key string, args ...interface{}) *redis.IntCmd {
 	return JsonDel(processor, ctx, key, args...)
 }
 
 // ---- JsonSet ----
+
+// JsonSet runs JSON.SET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONSet (see redis.JSONCmdable).
 func JsonSet(processor RedisProcessor, ctx context.Context, key string, path string, json string, args ...interface{}) *redis.StatusCmd {
 	paramsToItf := make([]interface{}, 0, 5-1+len(args))
 	paramsToItf = append(paramsToItf, "JSON.SET")
@@ -56,14 +84,26 @@ func JsonSet(processor RedisProcessor, ctx context.Context, key string, path str
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonSet runs JSON.SET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONSet (see redis.JSONCmdable).
 func (processor *Client) JsonSet(ctx context.Context, key string, path string, json string, args ...interface{}) *redis.StatusCmd {
 	return JsonSet(processor, ctx, key, path, json, args...)
 }
+
+// JsonSet runs JSON.SET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONSet (see redis.JSONCmdable).
 func (processor *Pipeline) JsonSet(ctx context.Context, key string, path string, json string, args ...interface{}) *redis.StatusCmd {
 	return JsonSet(processor, ctx, key, path, json, args...)
 }
 
 // ---- JsonMGet ----
+
+// JsonMGet runs JSON.MGET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMGet (see redis.JSONCmdable).
 func JsonMGet(processor RedisProcessor, ctx context.Context, key string, args ...interface{}) *redis.StringSliceCmd {
 	paramsToItf := make([]interface{}, 0, 3-1+len(args))
 	paramsToItf = append(paramsToItf, "JSON.MGET")
@@ -74,14 +114,26 @@ func JsonMGet(processor RedisProcessor, ctx context.Context, key string, args ..
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonMGet runs JSON.MGET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMGet (see redis.JSONCmdable).
 func (processor *Client) JsonMGet(ctx context.Context, key string, args ...interface{}) *redis.StringSliceCmd {
 	return JsonMGet(processor, ctx, key, args...)
 }
+
+// JsonMGet runs JSON.MGET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMGet (see redis.JSONCmdable).
 func (processor *Pipeline) JsonMGet(ctx context.Context, key string, args ...interface{}) *redis.StringSliceCmd {
 	return JsonMGet(processor, ctx, key, args...)
 }
 
 // ---- JsonType ----
+
+// JsonType runs JSON.TYPE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONType (see redis.JSONCmdable).
 func JsonType(processor RedisProcessor, ctx context.Context, key string, path string) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.TYPE")
@@ -92,14 +144,26 @@ func JsonType(processor RedisProcessor, ctx context.Context, key string, path st
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonType runs JSON.TYPE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONType (see redis.JSONCmdable).
 func (processor *Client) JsonType(ctx context.Context, key string, path string) *redis.StringCmd {
 	return JsonType(processor, ctx, key, path)
 }
+
+// JsonType runs JSON.TYPE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONType (see redis.JSONCmdable).
 func (processor *Pipeline) JsonType(ctx context.Context, key string, path string) *redis.StringCmd {
 	return JsonType(processor, ctx, key, path)
 }
 
 // ---- JsonNumIncrBy ----
+
+// JsonNumIncrBy runs JSON.NUMINCRBY.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONNumIncrBy (see redis.JSONCmdable).
 func JsonNumIncrBy(processor RedisProcessor, ctx context.Context, key string, path string, value int) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 4)
 	paramsToItf = append(paramsToItf, "JSON.NUMINCRBY")
@@ -111,14 +175,26 @@ func JsonNumIncrBy(processor RedisProcessor, ctx context.Context, key string, pa
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonNumIncrBy runs JSON.NUMINCRBY.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONNumIncrBy (see redis.JSONCmdable).
 func (processor *Client) JsonNumIncrBy(ctx context.Context, key string, path string, value int) *redis.StringCmd {
 	return JsonNumIncrBy(processor, ctx, key, path, value)
 }
+
+// JsonNumIncrBy runs JSON.NUMINCRBY.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONNumIncrBy (see redis.JSONCmdable).
 func (processor *Pipeline) JsonNumIncrBy(ctx context.Context, key string, path string, value int) *redis.StringCmd {
 	return JsonNumIncrBy(processor, ctx, key, path, value)
 }
 
 // ---- JsonNumMultBy ----
+
+// JsonNumMultBy runs JSON.NUMMULTBY.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package (for example Store.Update). JSON.NUMMULTBY is deprecated in RedisJSON and has no go-redis equivalent.
 func JsonNumMultBy(processor RedisProcessor, ctx context.Context, key string, path string, value int) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 4)
 	paramsToItf = append(paramsToItf, "JSON.NUMMULTBY")
@@ -130,14 +206,26 @@ func JsonNumMultBy(processor RedisProcessor, ctx context.Context, key string, pa
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonNumMultBy runs JSON.NUMMULTBY.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package (for example Store.Update). JSON.NUMMULTBY is deprecated in RedisJSON and has no go-redis equivalent.
 func (processor *Client) JsonNumMultBy(ctx context.Context, key string, path string, value int) *redis.StringCmd {
 	return JsonNumMultBy(processor, ctx, key, path, value)
 }
+
+// JsonNumMultBy runs JSON.NUMMULTBY.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package (for example Store.Update). JSON.NUMMULTBY is deprecated in RedisJSON and has no go-redis equivalent.
 func (processor *Pipeline) JsonNumMultBy(ctx context.Context, key string, path string, value int) *redis.StringCmd {
 	return JsonNumMultBy(processor, ctx, key, path, value)
 }
 
 // ---- JsonStrAppend ----
+
+// JsonStrAppend runs JSON.STRAPPEND.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONStrAppend (see redis.JSONCmdable).
 func JsonStrAppend(processor RedisProcessor, ctx context.Context, key string, path string, value string) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 4)
 	paramsToItf = append(paramsToItf, "JSON.STRAPPEND")
@@ -149,14 +237,26 @@ func JsonStrAppend(processor RedisProcessor, ctx context.Context, key string, pa
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonStrAppend runs JSON.STRAPPEND.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONStrAppend (see redis.JSONCmdable).
 func (processor *Client) JsonStrAppend(ctx context.Context, key string, path string, value string) *redis.IntCmd {
 	return JsonStrAppend(processor, ctx, key, path, value)
 }
+
+// JsonStrAppend runs JSON.STRAPPEND.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONStrAppend (see redis.JSONCmdable).
 func (processor *Pipeline) JsonStrAppend(ctx context.Context, key string, path string, value string) *redis.IntCmd {
 	return JsonStrAppend(processor, ctx, key, path, value)
 }
 
 // ---- JsonStrLen ----
+
+// JsonStrLen runs JSON.STRLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONStrLen (see redis.JSONCmdable).
 func JsonStrLen(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.STRLEN")
@@ -167,14 +267,26 @@ func JsonStrLen(processor RedisProcessor, ctx context.Context, key string, path 
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonStrLen runs JSON.STRLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONStrLen (see redis.JSONCmdable).
 func (processor *Client) JsonStrLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonStrLen(processor, ctx, key, path)
 }
+
+// JsonStrLen runs JSON.STRLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONStrLen (see redis.JSONCmdable).
 func (processor *Pipeline) JsonStrLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonStrLen(processor, ctx, key, path)
 }
 
 // ---- JsonArrAppend ----
+
+// JsonArrAppend runs JSON.ARRAPPEND.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrAppend (see redis.JSONCmdable).
 func JsonArrAppend(processor RedisProcessor, ctx context.Context, key string, path string, args ...interface{}) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 4-1+len(args))
 	paramsToItf = append(paramsToItf, "JSON.ARRAPPEND")
@@ -186,14 +298,26 @@ func JsonArrAppend(processor RedisProcessor, ctx context.Context, key string, pa
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonArrAppend runs JSON.ARRAPPEND.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrAppend (see redis.JSONCmdable).
 func (processor *Client) JsonArrAppend(ctx context.Context, key string, path string, args ...interface{}) *redis.IntCmd {
 	return JsonArrAppend(processor, ctx, key, path, args...)
 }
+
+// JsonArrAppend runs JSON.ARRAPPEND.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrAppend (see redis.JSONCmdable).
 func (processor *Pipeline) JsonArrAppend(ctx context.Context, key string, path string, args ...interface{}) *redis.IntCmd {
 	return JsonArrAppend(processor, ctx, key, path, args...)
 }
 
 // ---- JsonArrIndex ----
+
+// JsonArrIndex runs JSON.ARRINDEX.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrIndex (see redis.JSONCmdable).
 func JsonArrIndex(processor RedisProcessor, ctx context.Context, key string, path string, value interface{}, startAndStop ...interface{}) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 5-1+len(startAndStop))
 	paramsToItf = append(paramsToItf, "JSON.ARRINDEX")
@@ -206,14 +330,26 @@ func JsonArrIndex(processor RedisProcessor, ctx context.Context, key string, pat
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonArrIndex runs JSON.ARRINDEX.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrIndex (see redis.JSONCmdable).
 func (processor *Client) JsonArrIndex(ctx context.Context, key string, path string, value interface{}, startAndStop ...interface{}) *redis.IntCmd {
 	return JsonArrIndex(processor, ctx, key, path, value, startAndStop...)
 }
+
+// JsonArrIndex runs JSON.ARRINDEX.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrIndex (see redis.JSONCmdable).
 func (processor *Pipeline) JsonArrIndex(ctx context.Context, key string, path string, value interface{}, startAndStop ...interface{}) *redis.IntCmd {
 	return JsonArrIndex(processor, ctx, key, path, value, startAndStop...)
 }
 
 // ---- JsonArrInsert ----
+
+// JsonArrInsert runs JSON.ARRINSERT.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrInsert (see redis.JSONCmdable).
 func JsonArrInsert(processor RedisProcessor, ctx context.Context, key string, path string, index int, values ...interface{}) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 5-1+len(values))
 	paramsToItf = append(paramsToItf, "JSON.ARRINSERT")
@@ -226,14 +362,26 @@ func JsonArrInsert(processor RedisProcessor, ctx context.Context, key string, pa
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonArrInsert runs JSON.ARRINSERT.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrInsert (see redis.JSONCmdable).
 func (processor *Client) JsonArrInsert(ctx context.Context, key string, path string, index int, values ...interface{}) *redis.IntCmd {
 	return JsonArrInsert(processor, ctx, key, path, index, values...)
 }
+
+// JsonArrInsert runs JSON.ARRINSERT.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrInsert (see redis.JSONCmdable).
 func (processor *Pipeline) JsonArrInsert(ctx context.Context, key string, path string, index int, values ...interface{}) *redis.IntCmd {
 	return JsonArrInsert(processor, ctx, key, path, index, values...)
 }
 
 // ---- JsonArrLen ----
+
+// JsonArrLen runs JSON.ARRLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrLen (see redis.JSONCmdable).
 func JsonArrLen(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.ARRLEN")
@@ -244,14 +392,26 @@ func JsonArrLen(processor RedisProcessor, ctx context.Context, key string, path 
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonArrLen runs JSON.ARRLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrLen (see redis.JSONCmdable).
 func (processor *Client) JsonArrLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonArrLen(processor, ctx, key, path)
 }
+
+// JsonArrLen runs JSON.ARRLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrLen (see redis.JSONCmdable).
 func (processor *Pipeline) JsonArrLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonArrLen(processor, ctx, key, path)
 }
 
 // ---- JsonArrPop ----
+
+// JsonArrPop runs JSON.ARRPOP.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrPop (see redis.JSONCmdable).
 func JsonArrPop(processor RedisProcessor, ctx context.Context, key string, path string, index int) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 4)
 	paramsToItf = append(paramsToItf, "JSON.ARRPOP")
@@ -263,14 +423,26 @@ func JsonArrPop(processor RedisProcessor, ctx context.Context, key string, path 
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonArrPop runs JSON.ARRPOP.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrPop (see redis.JSONCmdable).
 func (processor *Client) JsonArrPop(ctx context.Context, key string, path string, index int) *redis.StringCmd {
 	return JsonArrPop(processor, ctx, key, path, index)
 }
+
+// JsonArrPop runs JSON.ARRPOP.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrPop (see redis.JSONCmdable).
 func (processor *Pipeline) JsonArrPop(ctx context.Context, key string, path string, index int) *redis.StringCmd {
 	return JsonArrPop(processor, ctx, key, path, index)
 }
 
 // ---- JsonArrTrim ----
+
+// JsonArrTrim runs JSON.ARRTRIM.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrTrim (see redis.JSONCmdable).
 func JsonArrTrim(processor RedisProcessor, ctx context.Context, key string, path string, start int, stop int) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 5)
 	paramsToItf = append(paramsToItf, "JSON.ARRTRIM")
@@ -283,14 +455,26 @@ func JsonArrTrim(processor RedisProcessor, ctx context.Context, key string, path
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonArrTrim runs JSON.ARRTRIM.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrTrim (see redis.JSONCmdable).
 func (processor *Client) JsonArrTrim(ctx context.Context, key string, path string, start int, stop int) *redis.IntCmd {
 	return JsonArrTrim(processor, ctx, key, path, start, stop)
 }
+
+// JsonArrTrim runs JSON.ARRTRIM.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONArrTrim (see redis.JSONCmdable).
 func (processor *Pipeline) JsonArrTrim(ctx context.Context, key string, path string, start int, stop int) *redis.IntCmd {
 	return JsonArrTrim(processor, ctx, key, path, start, stop)
 }
 
 // ---- JsonObjKeys ----
+
+// JsonObjKeys runs JSON.OBJKEYS.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONObjKeys (see redis.JSONCmdable).
 func JsonObjKeys(processor RedisProcessor, ctx context.Context, key string, path string) *redis.StringSliceCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.OBJKEYS")
@@ -301,14 +485,26 @@ func JsonObjKeys(processor RedisProcessor, ctx context.Context, key string, path
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonObjKeys runs JSON.OBJKEYS.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONObjKeys (see redis.JSONCmdable).
 func (processor *Client) JsonObjKeys(ctx context.Context, key string, path string) *redis.StringSliceCmd {
 	return JsonObjKeys(processor, ctx, key, path)
 }
+
+// JsonObjKeys runs JSON.OBJKEYS.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONObjKeys (see redis.JSONCmdable).
 func (processor *Pipeline) JsonObjKeys(ctx context.Context, key string, path string) *redis.StringSliceCmd {
 	return JsonObjKeys(processor, ctx, key, path)
 }
 
 // ---- JsonObjLen ----
+
+// JsonObjLen runs JSON.OBJLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONObjLen (see redis.JSONCmdable).
 func JsonObjLen(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.OBJLEN")
@@ -319,14 +515,26 @@ func JsonObjLen(processor RedisProcessor, ctx context.Context, key string, path 
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonObjLen runs JSON.OBJLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONObjLen (see redis.JSONCmdable).
 func (processor *Client) JsonObjLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonObjLen(processor, ctx, key, path)
 }
+
+// JsonObjLen runs JSON.OBJLEN.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONObjLen (see redis.JSONCmdable).
 func (processor *Pipeline) JsonObjLen(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonObjLen(processor, ctx, key, path)
 }
 
 // ---- JsonClear ----
+
+// JsonClear runs JSON.CLEAR.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONClear (see redis.JSONCmdable).
 func JsonClear(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.CLEAR")
@@ -337,14 +545,26 @@ func JsonClear(processor RedisProcessor, ctx context.Context, key string, path s
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonClear runs JSON.CLEAR.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONClear (see redis.JSONCmdable).
 func (processor *Client) JsonClear(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonClear(processor, ctx, key, path)
 }
+
+// JsonClear runs JSON.CLEAR.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONClear (see redis.JSONCmdable).
 func (processor *Pipeline) JsonClear(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonClear(processor, ctx, key, path)
 }
 
 // ---- JsonForget ----
+
+// JsonForget runs JSON.FORGET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONForget (see redis.JSONCmdable).
 func JsonForget(processor RedisProcessor, ctx context.Context, key string, path string) *redis.IntCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.FORGET")
@@ -355,14 +575,26 @@ func JsonForget(processor RedisProcessor, ctx context.Context, key string, path 
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonForget runs JSON.FORGET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONForget (see redis.JSONCmdable).
 func (processor *Client) JsonForget(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonForget(processor, ctx, key, path)
 }
+
+// JsonForget runs JSON.FORGET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONForget (see redis.JSONCmdable).
 func (processor *Pipeline) JsonForget(ctx context.Context, key string, path string) *redis.IntCmd {
 	return JsonForget(processor, ctx, key, path)
 }
 
 // ---- JsonMerge ----
+
+// JsonMerge runs JSON.MERGE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMerge (see redis.JSONCmdable).
 func JsonMerge(processor RedisProcessor, ctx context.Context, key string, path string, value string) *redis.StatusCmd {
 	paramsToItf := make([]interface{}, 0, 4)
 	paramsToItf = append(paramsToItf, "JSON.MERGE")
@@ -374,14 +606,26 @@ func JsonMerge(processor RedisProcessor, ctx context.Context, key string, path s
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonMerge runs JSON.MERGE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMerge (see redis.JSONCmdable).
 func (processor *Client) JsonMerge(ctx context.Context, key string, path string, value string) *redis.StatusCmd {
 	return JsonMerge(processor, ctx, key, path, value)
 }
+
+// JsonMerge runs JSON.MERGE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMerge (see redis.JSONCmdable).
 func (processor *Pipeline) JsonMerge(ctx context.Context, key string, path string, value string) *redis.StatusCmd {
 	return JsonMerge(processor, ctx, key, path, value)
 }
 
 // ---- JsonMSet ----
+
+// JsonMSet runs JSON.MSET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMSet (see redis.JSONCmdable).
 func JsonMSet(processor RedisProcessor, ctx context.Context, args ...interface{}) *redis.StatusCmd {
 	paramsToItf := make([]interface{}, 0, 2-1+len(args))
 	paramsToItf = append(paramsToItf, "JSON.MSET")
@@ -391,14 +635,26 @@ func JsonMSet(processor RedisProcessor, ctx context.Context, args ...interface{}
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonMSet runs JSON.MSET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMSet (see redis.JSONCmdable).
 func (processor *Client) JsonMSet(ctx context.Context, args ...interface{}) *redis.StatusCmd {
 	return JsonMSet(processor, ctx, args...)
 }
+
+// JsonMSet runs JSON.MSET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONMSet (see redis.JSONCmdable).
 func (processor *Pipeline) JsonMSet(ctx context.Context, args ...interface{}) *redis.StatusCmd {
 	return JsonMSet(processor, ctx, args...)
 }
 
 // ---- JsonSetMode ----
+
+// JsonSetMode runs JSON.SET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONSetMode (see redis.JSONCmdable).
 func JsonSetMode(processor RedisProcessor, ctx context.Context, key string, path string, value string, mode string) *redis.StatusCmd {
 	paramsToItf := make([]interface{}, 0, 5)
 	paramsToItf = append(paramsToItf, "JSON.SET")
@@ -411,14 +667,26 @@ func JsonSetMode(processor RedisProcessor, ctx context.Context, key string, path
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonSetMode runs JSON.SET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONSetMode (see redis.JSONCmdable).
 func (processor *Client) JsonSetMode(ctx context.Context, key string, path string, value string, mode string) *redis.StatusCmd {
 	return JsonSetMode(processor, ctx, key, path, value, mode)
 }
+
+// JsonSetMode runs JSON.SET.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONSetMode (see redis.JSONCmdable).
 func (processor *Pipeline) JsonSetMode(ctx context.Context, key string, path string, value string, mode string) *redis.StatusCmd {
 	return JsonSetMode(processor, ctx, key, path, value, mode)
 }
 
 // ---- JsonToggle ----
+
+// JsonToggle runs JSON.TOGGLE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONToggle (see redis.JSONCmdable).
 func JsonToggle(processor RedisProcessor, ctx context.Context, key string, path string) *redis.StringCmd {
 	paramsToItf := make([]interface{}, 0, 3)
 	paramsToItf = append(paramsToItf, "JSON.TOGGLE")
@@ -429,9 +697,17 @@ func JsonToggle(processor RedisProcessor, ctx context.Context, key string, path 
 	_ = processor.Process(ctx, cmd)
 	return cmd
 }
+
+// JsonToggle runs JSON.TOGGLE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONToggle (see redis.JSONCmdable).
 func (processor *Client) JsonToggle(ctx context.Context, key string, path string) *redis.StringCmd {
 	return JsonToggle(processor, ctx, key, path)
 }
+
+// JsonToggle runs JSON.TOGGLE.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package, or the native go-redis method JSONToggle (see redis.JSONCmdable).
 func (processor *Pipeline) JsonToggle(ctx context.Context, key string, path string) *redis.StringCmd {
 	return JsonToggle(processor, ctx, key, path)
 }
@@ -441,16 +717,18 @@ type RedisProcessor interface {
 	Process(context.Context, redis.Cmder) error
 }
 
-/*
-Client is an extended redis.Client, stores a pointer to the original redis.Client
-*/
+// Client is an extended redis.Client, stores a pointer to the original redis.Client.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
 type Client struct {
 	*redis.Client
 }
 
-/*
-Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner
-*/
+// Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
 type Pipeline struct {
 	redis.Pipeliner
 }
@@ -469,12 +747,20 @@ func (pl *Pipeline) Pipeline() *Pipeline {
 	return ExtendPipeline(pip)
 }
 
+// ExtendClient wraps client with the JSON command methods.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
 func ExtendClient(client *redis.Client) *Client {
 	return &Client{
 		client,
 	}
 }
 
+// ExtendPipeline wraps pipeline with the JSON command methods.
+//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
 func ExtendPipeline(pipeline redis.Pipeliner) *Pipeline {
 	return &Pipeline{
 		pipeline,
