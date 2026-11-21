@@ -438,16 +438,12 @@ type RedisProcessor interface {
 	Process(redis.Cmder) error
 }
 
-/*
-Client is an extended redis.Client, stores a pointer to the original redis.Client
-*/
+// Client is an extended redis.Client, stores a pointer to the original redis.Client.
 type Client struct {
 	*redis.Client
 }
 
-/*
-Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner
-*/
+// Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner.
 type Pipeline struct {
 	redis.Pipeliner
 }
@@ -466,12 +462,14 @@ func (pl *Pipeline) Pipeline() *Pipeline {
 	return ExtendPipeline(pip)
 }
 
+// ExtendClient wraps client with the JSON command methods.
 func ExtendClient(client *redis.Client) *Client {
 	return &Client{
 		client,
 	}
 }
 
+// ExtendPipeline wraps pipeline with the JSON command methods.
 func ExtendPipeline(pipeline redis.Pipeliner) *Pipeline {
 	return &Pipeline{
 		pipeline,

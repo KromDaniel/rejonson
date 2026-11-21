@@ -145,18 +145,16 @@ On a `ClusterClient`, `MGet` and `Scan` fetch keys with a pipeline, so the keys 
 
 ## Raw command helpers
 
-The root `rejonson/v9` package also has one function per RedisJSON command (`JsonGet`, `JsonSet`, `JsonArrAppend`, …). They take raw strings and return go-redis command types. They also exist for older go-redis versions, which makes them handy when migrating from v6–v8.
+The root `rejonson/v9` package also has one function per RedisJSON command (`JsonGet`, `JsonSet`, `JsonArrAppend`, …), plus `ExtendClient`/`ExtendPipeline` for method-style calls. They take raw strings and return go-redis command types.
+
+In v9 these helpers are **deprecated** (they still work and aren't going away in v9). go-redis v9 now has native, untyped JSON commands (`rdb.JSONGet`, `rdb.JSONSet`, …), and `doc` covers the typed case. Each helper's deprecation note names its replacement. They remain the main API in the v6–v8 modules, which makes them a stepping stone when migrating.
 
 ```go
 import rejonson "github.com/KromDaniel/rejonson/v9"
 
-rejonson.JsonSet(rdb, ctx, "example", "$", `{"a":1}`)
-val, err := rejonson.JsonGet(rdb, ctx, "example", "$").Result()
-
-client := rejonson.ExtendClient(rdb) // method style: client.JsonGet(ctx, ...), also on Pipeline()/TxPipeline()
+rejonson.JsonSet(rdb, ctx, "example", "$", `{"a":1}`) // deprecated: rdb.JSONSet(ctx, "example", "$", `{"a":1}`)
+client := rejonson.ExtendClient(rdb)                  // method style, also on Pipeline()/TXPipeline()
 ```
-
-go-redis v9 also has its own untyped JSON commands (`rdb.JSONGet`, `rdb.JSONSet`, …). Use `doc` when you want typed values.
 
 ## Redis server
 
@@ -193,7 +191,7 @@ length, err := client.JsonArrLen(ctx, "json", ".").Result()
 
 For v6, drop the `ctx` argument and import `github.com/KromDaniel/rejonson` with `github.com/go-redis/redis`.
 
-Upgrading go-redis to v9? Switch the import to `rejonson/v9`: the helpers have the same names and arguments. Then move to `doc` at your own pace.
+Upgrading go-redis to v9? Switch the import to `rejonson/v9`: the helpers have the same names and arguments, so the code compiles unchanged. Their deprecation notes then point you to `doc` or the native go-redis commands, which you can adopt at your own pace.
 
 ## Testing locally
 

@@ -3,17 +3,19 @@ type RedisProcessor interface {
 	Process({{if .HasContext}}context.Context,{{end}}redis.Cmder) error
 }
 
-/*
-Client is an extended redis.Client, stores a pointer to the original redis.Client
-*/
-type Client struct {
+// Client is an extended redis.Client, stores a pointer to the original redis.Client.
+{{if .Deprecated}}//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
+{{end}}type Client struct {
 	*redis.Client
 }
 
-/*
-Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner
-*/
-type Pipeline struct {
+// Pipeline is an extended redis.Pipeline, stores a pointer to the original redis.Pipeliner.
+{{if .Deprecated}}//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
+{{end}}type Pipeline struct {
 	redis.Pipeliner
 }
 
@@ -31,13 +33,21 @@ func (pl *Pipeline) Pipeline() *Pipeline {
 	return ExtendPipeline(pip)
 }
 
-func ExtendClient(client *redis.Client) *Client {
+// ExtendClient wraps client with the JSON command methods.
+{{if .Deprecated}}//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
+{{end}}func ExtendClient(client *redis.Client) *Client {
 	return &Client{
 		client,
 	}
 }
 
-func ExtendPipeline(pipeline redis.Pipeliner) *Pipeline {
+// ExtendPipeline wraps pipeline with the JSON command methods.
+{{if .Deprecated}}//
+// Deprecated: use the typed github.com/KromDaniel/rejonson/v9/doc package with a plain
+// go-redis client, or go-redis's native JSON commands (see redis.JSONCmdable).
+{{end}}func ExtendPipeline(pipeline redis.Pipeliner) *Pipeline {
 	return &Pipeline{
 		pipeline,
 	}

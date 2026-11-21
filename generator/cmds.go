@@ -91,8 +91,9 @@ var cmds = []RejsonCommand{
 		CommandCtr: redis.NewStringCmd,
 	},
 	{
-		Name: "JsonNumMultBy",
-		Cmd:  "JSON.NUMMULTBY",
+		Name:   "JsonNumMultBy",
+		Cmd:    "JSON.NUMMULTBY",
+		Native: "-",
 		Args: []RejsonArg{
 			keyArg,
 			{
