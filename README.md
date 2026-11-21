@@ -12,7 +12,7 @@ Rejonson wraps the entire RedisJSON command surface so you can keep using the `g
 - ✅ Supports go-redis v6, v7, v8, and v9 with generated, type-safe wrappers
 - 🧰 Works with clients, pipelines, clusters, and sentinels as drop-in processors
 - ⚙️ Keeps your project fresh: CI automatically tests the latest four Go releases and a scheduled job bumps the matrix for you
-- 🧪 Ships with integration tests that run against Redis Stack / RedisJSON out of the box
+- 🧪 Ships with integration tests that run against Redis 8 (JSON built in) and Redis Stack 7.4
 - 📚 Built for open-source collaboration with contributor docs and issue templates in repo
 
 ## Contents
@@ -28,14 +28,16 @@ Rejonson wraps the entire RedisJSON command surface so you can keep using the `g
 
 ## Compatibility & Install
 
-| go-redis version | Module path                         | Install command                            |
-| ---------------- | ----------------------------------- | ------------------------------------------ |
-| v6               | `github.com/KromDaniel/rejonson`    | `go get github.com/KromDaniel/rejonson`    |
-| v7               | `github.com/KromDaniel/rejonson/v7` | `go get github.com/KromDaniel/rejonson/v7` |
-| v8               | `github.com/KromDaniel/rejonson/v8` | `go get github.com/KromDaniel/rejonson/v8` |
-| v9               | `github.com/KromDaniel/rejonson/v9` | `go get github.com/KromDaniel/rejonson/v9` |
+| go-redis version | Module path                         | Install command                            | Minimum Go |
+| ---------------- | ----------------------------------- | ------------------------------------------ | ---------- |
+| v6               | `github.com/KromDaniel/rejonson`    | `go get github.com/KromDaniel/rejonson`    | 1.20       |
+| v7               | `github.com/KromDaniel/rejonson/v7` | `go get github.com/KromDaniel/rejonson/v7` | 1.20       |
+| v8               | `github.com/KromDaniel/rejonson/v8` | `go get github.com/KromDaniel/rejonson/v8` | 1.20       |
+| v9 (v9.23+)      | `github.com/KromDaniel/rejonson/v9` | `go get github.com/KromDaniel/rejonson/v9` | 1.26       |
 
 Pick the module that matches the `go-redis` major version in your project and `go get` it like any other dependency. Each module is versioned independently so you can upgrade only what you need.
+
+**Redis server:** Redis 8+ includes JSON built in, so plain `redis:8` works. On Redis 7.x, use Redis Stack or load the RedisJSON module. CI tests both Redis 8 and Redis Stack 7.4.
 
 ## Getting Started
 
@@ -110,18 +112,18 @@ Pipelines (`Pipeline`, `TxPipeline`) returned from an extended client also under
 
 ## Testing locally
 
-RedisJSON is required to run the integration tests. The quickest setup is Redis Stack in Docker:
+The integration tests need a Redis server with JSON support. Redis 8 has it built in:
 
 ```bash
-docker run --rm -p 6379:6379 redis/redis-stack-server:latest
+docker run --rm -p 6379:6379 redis:8
 ./test.sh
 ```
 
-> The test script walks through the root module and each submodule (`v7`, `v8`, `v9`) to guard against regressions across all supported go-redis versions.
+> The test script runs `go vet` and `go test -race` on the root module and each submodule (`v7`, `v8`, `v9`). With `GOTOOLCHAIN=local`, it skips any module that needs a newer Go than the one installed.
 
 ## Release cadence
 
-Continuous integration runs on every PR against the latest four Go toolchains (currently 1.22.x–1.25.x). A scheduled workflow re-generates the matrix once a month so new Go releases are picked up automatically—no manual edits required. We tag releases per module using semantic versioning so `go get` upgrades remain smooth.
+Continuous integration runs on every PR against the latest four Go toolchains (currently 1.24.x–1.27.x; the v9 module runs only on Go 1.26+, which go-redis v9.23 requires), against Redis 8 and Redis Stack 7.4. A scheduled workflow re-generates the matrix once a month so new Go releases are picked up automatically—no manual edits required. We tag releases per module using semantic versioning so `go get` upgrades remain smooth.
 
 ## Contributing
 

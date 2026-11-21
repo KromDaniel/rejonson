@@ -8,32 +8,41 @@ on:
 
 jobs:
   test:
-    name: Go ${{ matrix.go-version }}
+    name: Go ${{ matrix.go-version }} / Redis ${{ matrix.redis }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        go-version: ["1.25.x", "1.24.x", "1.23.x", "1.22.x"]
+        go-version: ["1.27.x", "1.26.x", "1.25.x", "1.24.x"]
+        redis: ["8"]
+        include:
+          # Oldest supported setup: Redis 7.4 with the RedisJSON module.
+          - go-version: "1.27.x"
+            redis: "7.4-stack"
+    env:
+      # Test with the exact toolchain from the matrix, don't auto-download a newer one.
+      GOTOOLCHAIN: local
     services:
       redis:
-        image: redis/redis-stack-server:latest
+        # Redis 8 ships JSON built in; Redis 7.x needs the Redis Stack image.
+        image: ${{ matrix.redis == '7.4-stack' && 'redis/redis-stack-server:7.4.0-v8' || format('redis:{0}', matrix.redis) }}
         ports:
           - 6379:6379
         options: >-
-          --health-cmd "redis-cli -h 127.0.0.1 -p 6379 ping"
-          --health-interval 10s
+          --health-cmd "redis-cli ping"
+          --health-interval 5s
           --health-timeout 5s
-          --health-retries 10
+          --health-retries 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Go
-        uses: actions/setup-go@v5
+        uses: actions/setup-go@v6
         with:
           go-version: ${{ matrix.go-version }}
           check-latest: true
-          cache: true
+          cache-dependency-path: "**/go.sum"
 
       - name: Install redis-cli
         run: sudo apt-get update && sudo apt-get install -y redis-tools
@@ -41,28 +50,14 @@ jobs:
       - name: Wait for RedisJSON
         run: |
           for i in {1..30}; do
-            if redis-cli -h 127.0.0.1 -p 6379 ping; then
-              redis-cli -h 127.0.0.1 -p 6379 JSON.SET ready . '"ok"' && exit 0
+            if redis-cli -h 127.0.0.1 -p 6379 JSON.SET ready . '"ok"'; then
+              redis-cli -h 127.0.0.1 -p 6379 INFO server | grep redis_version
+              exit 0
             fi
             sleep 2
           done
-          echo "Redis service failed to start" >&2
+          echo "Redis with JSON support failed to start" >&2
           exit 1
 
-      - name: Run tests across modules
+      - name: Vet and test all modules
         run: bash ./test.sh
-
-      - name: Go vet (root module)
-        run: go vet ./...
-
-      - name: Go vet (v7)
-        run: go vet ./...
-        working-directory: v7
-
-      - name: Go vet (v8)
-        run: go vet ./...
-        working-directory: v8
-
-      - name: Go vet (v9)
-        run: go vet ./...
-        working-directory: v9
